@@ -8,13 +8,11 @@ Le principali aree da testare sono:
     Possibili vulnerabilità
 
 ## Interazioni con il database / algoritmi
-Per poter testare automaticamente le interazioni con il DB e i vari algoritmi si potrebbero usare diversi UnitTest che verificano il corretto comportamento dei controller.
-Questo controllo viene fatto secondo le linee guida di sviluppo interne in cui il codice deve di logica deve stare all'interno dei controller.
+Per testare in modo automatico le interazioni con il database e verificare il corretto funzionamento degli algoritmi, si suggerisce di utilizzare UnitTest che possano validare il comportamento dei controller. Questo test viene eseguito seguendo le linee guida interne, secondo cui la logica applicativa deve essere contenuta all'interno dei controller.
 
-Durante le prime fasi di analisi ho verificato e testato il funzionamento del collegamento a un database, trovando diverse difficolta.
-Nella creazioen di unit test, normalrmente, si utilizzano dei Moq (oggetti fittizzi), questi causano però dei problemi:
- - Non ho un'iterazione effettiva con un DB, se c'è qualche problema di ChangeTracker o Insert/Update/Delete non me ne accorgo
- - Devo inizializzare ogni DbSet manualmente
+Durante le fasi iniziali di analisi, ho riscontrato alcune difficoltà nella creazione dei test. In particolare, l'uso di oggetti fittizi tramite Moq (mocking) ha presentato delle problematiche:
+ - **Assenza di interazione effettiva con il database:** Utilizzare oggetti fittizi non consente di rilevare eventuali errori legati al `ChangeTracker` o alle operazioni di `Insert/Update/Delete`, che potrebbero passare inosservati.
+ - Inizializzazione manuale di ogni `DbSet`: Ogni DbSet deve essere inizializzato manualmente, il che comporta una gestione complessa del codice di test. Ad esempio, per ogni `DbSet` si deve scrivere una configurazione simile alla seguente:
  ```csharp
     mockSet.As<IQueryable<Ditta>>().Setup(m => m.Provider).Returns(data.Provider);
     mockSet.As<IQueryable<Ditta>>().Setup(m => m.Expression).Returns(data.Expression);
@@ -22,13 +20,13 @@ Nella creazioen di unit test, normalrmente, si utilizzano dei Moq (oggetti fitti
     mockSet.As<IQueryable<Ditta>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
     _mockContext.Setup(c => c.Ditte).Returns(_mockDitteSet.Object);
 ```
- questo per ogni singolo DbSet, quindi per esempio anche su i LoggerType.
+Questo approccio deve essere ripetuto per ogni singolo `DbSet`, come ad esempio anche per i `LoggerType`.
 
-Queste due problematiche mi portano a dire che forse è più opportuno ragionare su un db veritiero. La questione di avere un Moq sarebbe utile per poter lanciare automaticamente i test tramite pipeline. Forse a sto punto conviene generare un test tramite SQL Server, lanciando i test su una macchina interna che possa interfacciarsi con il docker.
+Le problematiche sopra descritte suggeriscono che potrebbe essere più opportuno considerare l'uso di un database reale per i test. Sebbene l'uso di Moq consenta di eseguire i test automaticamente tramite pipeline, potrebbe essere vantaggioso eseguire i test su un database vero, per verificare anche le operazioni più complesse. Una possibile soluzione sarebbe lanciare i test su un server SQL interno, configurato per interfacciarsi con un contenitore Docker.
 
 
 ## User Interface
-Questo test automaticamente non è semplice effettuarlo. Si può pensare a tool come Selenium che simulano l'interazione dell'utente, ma non viene mai garantito che sia coretto il test, magari manca un'immagine o una regola css e non è da utente.
+Testare automaticamente la User Interface (UI) può risultare particolarmente complesso. Sebbene strumenti come Selenium permettano di simulare l'interazione dell'utente con la UI, non vi è mai una garanzia assoluta che il test venga eseguito correttamente. Alcuni elementi, come immagini mancanti o errori nei CSS, potrebbero non essere rilevati, ma potrebbero compromettere l'esperienza dell'utente finale. È quindi importante adottare una strategia combinata che preveda anche il controllo manuale di elementi visivi e funzionali.
 
 ## Possibili vulnerabilità
-Possiamo utilizzare "OWASP Dependency Check" che può essere integrato nelle pipeline ed esporta le problematiche
+Per quanto riguarda le vulnerabilità di sicurezza, è consigliabile integrare il tool (OWASP Dependency)[https://marketplace.visualstudio.com/items?itemName=dependency-check.dependencycheck] Check all'interno delle pipeline di sviluppo. Questo strumento consente di analizzare le dipendenze del progetto e identificare vulnerabilità note nelle librerie utilizzate. Il report generato da OWASP Dependency Check può essere esportato e utilizzato per adottare misure correttive tempestive.
