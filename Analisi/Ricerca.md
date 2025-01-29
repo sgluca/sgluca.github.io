@@ -302,4 +302,3 @@ public class ContentService
 ## Conclusioni
 
 Il motore di ricerca supporta sia SQL che Elasticsearch attraverso provider configurabili. Attraverso la gestione dei custom attribute sulle classi e l'uso di una tabella di categorie, è possibile definire quali oggetti sono "contenuti" e il link al dettaglio di tali contenuti. Inoltre, l'aggiornamento degli indici è gestito tramite l'interfaccia `IIndexUpdater` e le sue implementazioni specifiche per Elasticsearch e SQL Server.
-
