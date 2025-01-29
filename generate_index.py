@@ -1,6 +1,6 @@
 import os
 
-folder = "analisi"
+folder = "Analisi"
 files = sorted(os.listdir(folder))
 
 with open(f"{folder}/index.md", "w", encoding="utf-8") as f:
