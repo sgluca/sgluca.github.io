@@ -3,7 +3,7 @@ name: Aggiorna elenco file in analisi
 on:
   push:
     paths:
-      - 'analisi/**'
+      - 'Analisi/**'
   workflow_dispatch:
 
 jobs:
