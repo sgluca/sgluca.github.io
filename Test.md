@@ -2,10 +2,9 @@
 In vista della certificazione ISO, è necessario impostare e definire una serie di test da eseguire sul codice per garantirne il corretto funzionamento e il rispetto degli standard di qualità.
 
 Le principali aree da testare sono:
-
-    Interazioni con il database e algoritmi
-    User Interface (UI)
-    Possibili vulnerabilità
+- Interazioni con il database e algoritmi
+- User Interface (UI)
+- Possibili vulnerabilità
 
 ## Interazioni con il database / algoritmi
 Per testare in modo automatico le interazioni con il database e verificare il corretto funzionamento degli algoritmi, si suggerisce di utilizzare UnitTest che possano validare il comportamento dei controller. Questo test viene eseguito seguendo le linee guida interne, secondo cui la logica applicativa deve essere contenuta all'interno dei controller.
