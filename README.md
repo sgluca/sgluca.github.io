@@ -3,7 +3,7 @@
 Ecco le pagine disponibili:
 
 - [Home](./) 🏠
-- [Analisi](./analisi) ✍️
+- [Analisi](./Analisi) ✍️
 
 Buona navigazione! 🌍
 
