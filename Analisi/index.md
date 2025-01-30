@@ -1,4 +1,4 @@
-# 📂 Analisi
+# 🔍 Analisi
 
 Ecco i documenti disponibili:
 
