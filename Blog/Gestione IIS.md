@@ -1,0 +1,87 @@
+# Gestione IIS
+
+IIS (Internet Information Services) è il motore per la gestione delle pagine Web su server Windows.
+
+## Creazione Nuovo Sito
+Per creare un nuovo sito su IIS, seguire questi passaggi:
+
+1. Aprire il Manager di IIS.
+2. Fare clic con il tasto destro su "Sites" e selezionare "Add Website".
+3. Indicare:
+   - Nome sito: `[primoliv].[secondoliv].[terzoliv]`
+   - Physical path: percorso fisico della directory del sito
+   - Host Nome: nome host del sito
+
+## Bindings
+Per configurare i binding di un sito su IIS, seguire questi passaggi:
+
+1. Selezionare il sito desiderato nel Manager di IIS.
+2. Fare clic su "Bindings..." nel pannello di destra.
+3. Nella finestra "Site Bindings", fare clic su "Add..." per aggiungere un nuovo binding o selezionare un binding esistente e fare clic su "Edit..." per modificarlo.
+
+### HTTP
+Per configurare un binding HTTP, compilare i seguenti campi:
+- **Type**: selezionare "http".
+- **IP address**: selezionare l'indirizzo IP su cui il sito deve rispondere. Lasciare "All Unassigned" per rispondere su tutti gli indirizzi IP.
+- **Port**: specificare la porta su cui il sito deve rispondere (di solito 80 per HTTP).
+- **Host name**: specificare il nome host del sito (es. www.esempio.com). Lasciare vuoto per rispondere a tutte le richieste sull'indirizzo IP e porta specificati.
+
+### HTTPS
+Per configurare un binding HTTPS, compilare i seguenti campi:
+- **Type**: selezionare "https".
+- **IP address**: selezionare l'indirizzo IP su cui il sito deve rispondere. Lasciare "All Unassigned" per rispondere su tutti gli indirizzi IP.
+- **Port**: specificare la porta su cui il sito deve rispondere (di solito 443 per HTTPS).
+- **Host name**: specificare il nome host del sito (es. www.esempio.com). Lasciare vuoto per rispondere a tutte le richieste sull'indirizzo IP e porta specificati.
+- **SSL certificate**: selezionare il certificato SSL da utilizzare per il sito. Assicurarsi che il certificato sia già stato installato sul server.
+
+#### Opzioni Avanzate
+- **Require Server Name Indication (SNI)**: spuntare questa opzione se si desidera che il server richieda il nome del server durante la negoziazione SSL. Questo è utile per ospitare più certificati SSL su un singolo indirizzo IP. **ATTENZIONE**
+- **Disable TLS 1.3**: spuntare questa opzione se si desidera disabilitare il supporto per TLS 1.3. Questo può essere necessario per compatibilità con client più vecchi.
+- **Enable TLS legacy**: spuntare questa opzione per abilitare il supporto per versioni legacy di TLS.
+- **Disable QUIC**: spuntare questa opzione per disabilitare il supporto per il protocollo QUIC.
+- **Disable HTTP/2**: spuntare questa opzione per disabilitare il supporto per il protocollo HTTP/2.
+- **Client certificate negotiation**: selezionare questa opzione per abilitare la negoziazione del certificato client.
+- **Disable OCSP stapling**: spuntare questa opzione per disabilitare l'OCSP stapling, che migliora le prestazioni della verifica del certificato.
+
+Una volta configurati i binding e le opzioni avanzate, fare clic su "OK" per salvare le modifiche e chiudere la finestra "Site Bindings".
+
+## Url Rewrite
+Il modulo Url Rewrite di IIS consente di creare regole per riscrivere gli URL delle richieste HTTP. Questo è utile per migliorare la SEO, gestire le migrazioni di siti web, e creare URL più leggibili e user-friendly.
+
+### Installazione del Modulo Url Rewrite
+Per installare il modulo Url Rewrite, seguire questo link: [URL Rewrite](https://www.iis.net/downloads/microsoft/url-rewrite). Dopo l'installazione, chiudere e riaprire la finestra di IIS.
+
+### Creazione di una Regola di Riscrittura
+1. Aprire il Manager di IIS.
+2. Selezionare il sito desiderato nel pannello di sinistra.
+3. Nel pannello centrale, fare clic su "URL Rewrite".
+4. Fare clic su "Add Rule(s)..." nel pannello di destra.
+5. Selezionare il tipo di regola desiderato (es. "Blank rule" per una regola personalizzata).
+6. Configurare i campi della regola:
+   - **Name**: nome della regola.
+   - **Pattern**: pattern dell'URL da riscrivere.
+   - **Action**: azione da eseguire (es. "Rewrite" per riscrivere l'URL, "Redirect" per reindirizzare l'URL).
+
+### Esempio di Regola di Riscrittura
+Per riscrivere tutte le richieste da "http://www.esempio.com/vecchio" a "http://www.esempio.com/nuovo":
+1. Creare una nuova regola di riscrittura come descritto sopra.
+2. Configurare i campi della regola:
+   - **Name**: "RewriteOldToNew".
+   - **Pattern**: "^vecchio$".
+   - **Action**: "Rewrite".
+   - **Rewrite URL**: "/nuovo".
+
+### Esempio di Riscrittura da HTTP a HTTPS
+Per riscrivere tutte le richieste da "http://www.esempio.com" a "https://www.esempio.com":
+1. Creare una nuova regola di riscrittura come descritto sopra.
+2. Configurare i campi della regola:
+   - **Name**: "RewriteHttpToHttps".
+   - **Pattern**: "(.*)".
+   - **Action**: "Redirect".
+   - **Redirect URL**: "https://{HTTP_HOST}/{R:1}".
+   - **Redirect type**: "Permanent (301)".
+
+Una volta configurata la regola, fare clic su "Apply" nel pannello di destra per salvare le modifiche.
+
+## Conclusione
+Seguendo questi passaggi, è possibile creare e configurare un sito su IIS, inclusa la gestione dei binding HTTP e HTTPS, le opzioni avanzate per il binding HTTPS, e l'utilizzo del modulo Url Rewrite per riscrivere gli URL delle richieste HTTP.
