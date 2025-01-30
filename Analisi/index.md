@@ -2,7 +2,7 @@
 
 Ecco i documenti disponibili:
 
-- [📄 Ricerca.md](./Ricerca.md)
-- [📄 Test.md](./Test.md)
+- [📄 Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core](./Ricerca.md)
+- [📄 Gestione Test del Codice](./Test.md)
 
 Clicca su un file per aprirlo!
