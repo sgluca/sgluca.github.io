@@ -1,4 +1,4 @@
-# Benvenuto su [sgluca.github.io](https://sgluca.github.io) 🚀
+# Benvenuto su [sagliettiluca.it](https://sagliettiluca.it) 🚀
 
 Ecco le pagine disponibili:
 
@@ -22,8 +22,10 @@ Ciao! Sono Luca, uno sviluppatore .NET con la passione per la tecnologia e il vo
 
 Se vuoi metterti in contatto con me, puoi farlo qui:
 
-- 📧 Email: [info@sagliettiluca.com](mailto:info@sagliettiluca.com)
-- 🐙 GitHub: [github.com/sgluca](https://github.com/sgluca)
-
+- 📧 **Email:** [info@sagliettiluca.com](mailto:info@sagliettiluca.com)
+- 🐙 **GitHub:** [github.com/sgluca](https://github.com/sgluca)
+- 📸 **Instagram:** [saglietti.luca](https://www.instagram.com/saglietti.luca/)
+- 📘 **Facebook:** [sgluca01](https://www.facebook.com/sgluca01/)
+- 💼 **LinkedIn:** [luca-saglietti](https://www.linkedin.com/in/luca-saglietti/)
 
 A presto! 🚀
