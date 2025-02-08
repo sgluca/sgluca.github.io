@@ -1,5 +1,32 @@
 # Interazione Uomo-Macchina
 
+## Indice dei Capitoli
+
+1. [I 10 Principi di Usabilità di Nielsen](IUM/I_10_Principi_di_Usabilita_di_Nielsen.md)
+   - Riassunto: Principi fondamentali per garantire un'esperienza d'uso semplice, efficace e soddisfacente.
+2. [I Golfi di Norman: Esecuzione e Valutazione](IUM/I_Golfi_di_Norman.md)
+   - Riassunto: Descrizione dei due "golfi" principali nell'interazione uomo-macchina secondo Donald Norman.
+3. [Le Tre Leggi di Krug sull’Usabilità](IUM/Le_Tre_Leggi_di_Krug.md)
+   - Riassunto: Principi di usabilità di Steve Krug per creare interfacce intuitive e facili da usare.
+4. [Linee Guida WCAG: Accessibilità Web in Italia](IUM/Linee_Guida_WCAG.md)
+   - Riassunto: Regole per rendere i contenuti web accessibili a persone con disabilità.
+5. [Affordance e Constraints](IUM/Affordance_e_Constraints.md)
+   - Riassunto: Concetti fondamentali nella progettazione dell'interazione per guidare l'utente nell'uso di un sistema.
+6. [Le 8 regole d'oro di Shneiderman](IUM/Le_8_Regole_d_Oro_di_Shneiderman.md)
+   - Riassunto: Principi guida per creare interfacce efficaci e facili da usare.
+7. [Principi di "design dell'interazione" di Bruce Tognazzini](IUM/Principi_di_Design_di_Tognazzini.md)
+   - Riassunto: Linee guida per migliorare l'usabilità delle interfacce.
+8. [User-Centered Design (UCD)](IUM/User_Centered_Design.md)
+   - Riassunto: Metodologia che pone l'utente al centro di tutte le fasi del processo di sviluppo di un sistema interattivo.
+9. [Legge Stanca](IUM/Legge_Stanca.md)
+   - Riassunto: Normativa italiana che mira a garantire l'accessibilità dei servizi digitali alle persone con disabilità.
+10. [Architettura dell'Informazione e Navigazione](IUM/Architettura_dell_Informazione_e_Navigazione.md)
+    - Riassunto: Arte e scienza di organizzare e strutturare l'informazione all'interno di uno spazio informativo.
+11. [Metodologie di Progettazione e Valutazione](IUM/Metodologie_di_Progettazione_e_Valutazione.md)
+    - Riassunto: Panoramica delle metodologie di progettazione e valutazione per garantire l'usabilità e l'efficacia di un sistema interattivo.
+12. [Storia dell'Interazione Uomo-Computer](IUM/Storia_dell_Interazione_Uomo_Computer.md)
+    - Riassunto: Timeline dettagliata e cast di personaggi principali nel campo dell'interazione uomo-computer.
+
 ## I 10 Principi di Usabilità di Nielsen
 
 I documenti analizzati fanno riferimento ai principi di usabilità di Nielsen, anche se non li elencano esplicitamente come una lista di dieci punti. Tuttavia, emergono diversi aspetti fondamentali dell'usabilità secondo Nielsen. Di seguito sono riportati i principi più rilevanti:
