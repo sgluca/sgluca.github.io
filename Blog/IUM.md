@@ -1,108 +1,89 @@
-# Interazione Uomo Macchina
+# Interazione Uomo-Macchina
 
-## I 10 Principi di Usabilità Nielsen
-I documenti forniti fanno riferimento ai principi di usabilità di Nielsen, ma non li elencano esplicitamente come una lista di 10 principi. Tuttavia, i documenti descrivono diversi aspetti dell'usabilità secondo Nielsen. Di seguito sono riportati i principi e le linee guida più importanti identificati nei documenti, che possono essere considerati i principi di Nielsen:
+## I 10 Principi di Usabilità di Nielsen
 
-- **Facilità di apprendimento:** L'interfaccia dovrebbe puntare a un "tempo di apprendimento zero", essendo facile e intuitiva da usare. Questo significa che l'utente dovrebbe essere in grado di capire come usare il sistema senza dover investire troppo tempo nell'apprendimento.
+I documenti analizzati fanno riferimento ai principi di usabilità di Nielsen, anche se non li elencano esplicitamente come una lista di dieci punti. Tuttavia, emergono diversi aspetti fondamentali dell'usabilità secondo Nielsen. Di seguito sono riportati i principi più rilevanti:
 
-- **Efficienza d'uso:** Il sistema deve consentire agli utenti di raggiungere i loro scopi in modo efficace. Questo è misurabile tramite valutazione empirica. L'efficienza è strettamente legata alla capacità di un sistema di soddisfare gli scopi per cui è stato progettato.
+- **Facilità di apprendimento:** L'interfaccia dovrebbe essere immediata e intuitiva, riducendo al minimo il tempo necessario per imparare a usarla.
+- **Efficienza d’uso:** Il sistema deve permettere agli utenti di raggiungere i propri obiettivi rapidamente ed efficacemente.
+- **Facilità di comprensione:** È preferibile il riconoscimento delle informazioni rispetto al loro recupero dalla memoria, facilitando l’interazione.
+- **Feedback chiaro:** Il sistema deve comunicare in modo trasparente le conseguenze delle azioni dell’utente.
+- **Gestione del carico cognitivo:** L’interfaccia non deve sovraccaricare la memoria dell’utente, garantendo chiarezza e semplicità.
+- **Navigabilità intuitiva:** La struttura di navigazione deve essere chiara e aiutare l’utente a trovare le informazioni rapidamente.
+- **Soddisfazione delle aspettative:** Il sito deve fornire contenuti pertinenti rispetto alle aspettative dell’utente.
+- **Completezza dei contenuti:** Le informazioni devono essere dettagliate quanto basta per rispondere alle esigenze dell’utente.
+- **Chiarezza comunicativa:** Il linguaggio deve essere semplice, diretto e adeguato al target di riferimento.
+- **Coerenza e standardizzazione:** Le interfacce devono seguire convenzioni consolidate per garantire prevedibilità e facilità d’uso.
 
-- **Facilità di comprensione:** È fondamentale favorire il riconoscimento delle informazioni piuttosto che richiederne il recupero dalla memoria. Questo significa che le informazioni devono essere presentate in modo chiaro e facilmente riconoscibile, senza richiedere uno sforzo eccessivo di memoria.
-
-- **Fornire feedback agli utenti:** Il sistema deve comunicare in modo chiaro le conseguenze delle azioni dell'utente. Un buon feedback aiuta l'utente a capire se il sistema sta funzionando correttamente e se le sue azioni hanno avuto l'effetto desiderato.
-
-- **Supportare il carico cognitivo dell'utente:** Il sistema dovrebbe essere progettato per non sovraccaricare la memoria a breve termine dell'utente. Questo può essere ottenuto attraverso un'interfaccia chiara e semplice che riduce il carico cognitivo.
-
-- **Navigabilità:** Il sistema di navigazione deve essere chiaro e aiutare l'utente a trovare le informazioni di cui ha bisogno. Una buona navigazione consente all'utente di orientarsi facilmente all'interno del sito o dell'applicazione.
-
-- **Utilità attesa:** Il sito deve soddisfare le aspettative informative degli utenti. Un sito web è utile quando fornisce le informazioni che gli utenti si aspettano di trovare.
-
-- **Completezza dei contenuti:** Il sito deve fornire un livello di dettaglio delle informazioni sufficiente per soddisfare gli utenti. Questo significa che il sito deve fornire tutte le informazioni necessarie per soddisfare le esigenze dell'utente.
-
-- **Comprensibilità delle informazioni:** Lo stile di comunicazione utilizzato nel sito deve essere adeguato agli utenti. Le informazioni devono essere scritte in modo chiaro e semplice, utilizzando un linguaggio appropriato per il pubblico di riferimento.
-
-- **Coerenza e standard:** Le interfacce dovrebbero essere coerenti e prevedibili, seguendo convenzioni e standard di design ben consolidati. Gli utenti sviluppano delle aspettative quando navigano, che si sono formate navigando in altri siti. Un sito che non utilizza colori e formattazione standard diventa difficile da apprendere.
-
-Questi principi di usabilità, secondo Nielsen, mirano a creare sistemi che siano facili da usare, efficienti e soddisfacenti per gli utenti. Inoltre, i documenti forniscono ulteriori linee guida specifiche per il design di siti web, come l'importanza di una home page chiara, la presentazione del contenuto in modo leggibile, l'uso appropriato di elementi multimediali e l'importanza di fornire una navigazione chiara e coerente. I link non dovrebbero essere più lunghi di quattro parole, e quelli più importanti dovrebbero essere posizionati in alto. È importante evitare blocchi di testo lunghi e preferire uno stile di scrittura semplice.
-
-## I Golfi di Norman: Esecuzione e Valutazione
-Secondo Donald Norman, ogni azione è caratterizzata da due aspetti principali: fare qualcosa (esecuzione) e verificarne gli effetti (valutazione). Le maggiori difficoltà legate alle azioni derivano dalle distanze tra le rappresentazioni mentali del soggetto e gli stati fisici dell’ambiente. In particolare, Norman individua due "golfi" che separano gli stati mentali da quelli fisici: il **golfo dell'esecuzione** e il **golfo della valutazione.**
-
-- **Golfo dell'esecuzione:** Rappresenta la distanza tra le intenzioni e le azioni possibili. In termini di HCI, è la distanza tra le azioni che l'utente vorrebbe eseguire tramite il sistema e le funzioni che il sistema mette a disposizione. Se l'utente non deve fare uno sforzo eccessivo per trovare la corrispondenza tra le azioni che vuole eseguire e quelle disponibili nel sistema, questa distanza è accettabile. La condizione necessaria affinché ciò accada è che esista una chiara e visibile funzionalità del sistema che corrisponde all'intenzione dell'utente. Per ridurre il golfo dell'esecuzione, è importante che i comandi siano chiari, visibili e comprensibili all'utente, in modo che egli possa facilmente individuare le funzionalità dell'interfaccia e le azioni possibili su di essa.
-
-- **Golfo della valutazione:** Rappresenta la distanza tra lo stato risultante del mondo esterno (ovvero del sistema) e la percezione che ne ha l'utente. Se gli effetti dei comandi impartiti al sistema sono percepiti agevolmente dall'utente, questa distanza è accettabile. Il golfo della valutazione può essere ridotto se il sistema fornisce un buon feedback. Attraverso i dispositivi di output (video, audio), l'utente riceve un feedback che gli permette di valutare gli effetti delle sue azioni. Se questi effetti sono conformi alle aspettative, l'interazione è andata a buon fine e l'utente ha raggiunto il suo scopo; diversamente, inizia un nuovo ciclo di azione/interazione.
-
-In sintesi, i "golfi" di Norman evidenziano le difficoltà che gli utenti possono incontrare nell'interagire con un sistema, sia nel capire come eseguire le azioni desiderate (golfo dell'esecuzione), sia nel valutare se le azioni intraprese hanno avuto l'effetto desiderato (golfo della valutazione). Un buon design cerca di creare un ponte tra questi golfi, riducendo lo sforzo cognitivo richiesto all'utente.
-
-## Le Tre Leggi di Krug sull'Usabilità
-### Prima legge: Don't make me think. 
-Le pagine web dovrebbero essere autoevidenti e l'utente non dovrebbe porsi troppe domande durante la navigazione. Se un utente è frustrato dall'interfaccia, abbandonerà il sito.
-
-### Seconda legge: Non importa quanti click devo fare, se ogni click è frutto di una scelta che non richiede impegno e non è ambigua. 
-Gli utenti devono avere la certezza di essere sulla strada giusta quando navigano un sito web. Esplorare il web è come muoversi in uno spazio fisico e, proprio come in un supermercato, gli utenti hanno bisogno di punti di riferimento chiari per orientarsi.
-
-### Terza legge: Sbarazzati di metà delle parole di ogni pagina e poi sbarazzati di metà di quello che resta. 
-Il contenuto online dovrebbe essere conciso ed evitare "aria fritta" e istruzioni superflue. Gli utenti non leggono le pagine web per intero ma le scorrono cercando le informazioni che li interessano [2, 6].
+Questi principi mirano a garantire un’esperienza d’uso semplice, efficace e soddisfacente. Inoltre, i documenti analizzati sottolineano l’importanza di una homepage chiara, della leggibilità dei contenuti, dell’uso appropriato di elementi multimediali e di una navigazione coerente. È consigliato evitare blocchi di testo lunghi, prediligendo uno stile sintetico e diretto.
 
 ---
 
-Krug sottolinea inoltre che per avere un buon sito web è fondamentale testarlo con gli utenti [7, 8]. Anche testare un solo utente è molto più utile che non testarne nessuno, e i test sono più efficaci se condotti all'inizio del progetto.
+## I Golfi di Norman: Esecuzione e Valutazione
+
+Secondo Donald Norman, ogni azione si compone di due aspetti principali: eseguire un'azione e valutarne gli effetti. Le difficoltà nell’interazione uomo-macchina derivano dalla distanza tra le rappresentazioni mentali dell’utente e lo stato fisico del sistema. Norman identifica due "golfi" principali:
+
+- **Golfo dell’esecuzione:** È la distanza tra le intenzioni dell’utente e le azioni che il sistema permette di eseguire. Minore è lo sforzo richiesto per trovare una corrispondenza tra intenzione e azione, più l’interazione sarà intuitiva.
+- **Golfo della valutazione:** È la distanza tra lo stato attuale del sistema e la percezione dell’utente. Se il feedback è chiaro e immediato, questa distanza si riduce, facilitando la comprensione degli effetti delle proprie azioni.
+
+Un buon design riduce questi golfi, minimizzando lo sforzo cognitivo richiesto all’utente e migliorando l’interazione complessiva.
+
+---
+
+## Le Tre Leggi di Krug sull’Usabilità
+
+### **1. "Don't make me think"**  
+Un’interfaccia deve essere autoesplicativa. L’utente non dovrebbe dover riflettere su come interagire con il sistema. Se l’esperienza è frustrante, l’utente abbandonerà il sito.
+
+### **2. "Non importa quanti click devo fare, purché ogni click sia chiaro e privo di ambiguità"**  
+Gli utenti devono sempre avere la certezza di trovarsi sulla strada giusta. Navigare un sito deve essere intuitivo, come muoversi in uno spazio ben organizzato.
+
+### **3. "Taglia metà delle parole di ogni pagina, poi taglia ancora metà di ciò che rimane"**  
+Il contenuto deve essere sintetico ed essenziale. Gli utenti non leggono interamente le pagine web, ma le scansionano alla ricerca di informazioni rilevanti.
+
+Krug sottolinea inoltre l’importanza dei test di usabilità. Anche un solo test è più utile di nessuno, e i migliori risultati si ottengono nelle fasi iniziali di progettazione.
+
+---
 
 ## Linee Guida WCAG: Accessibilità Web in Italia
-Le WCAG (Web Content Accessibility Guidelines) sono linee guida per rendere i contenuti web più accessibili alle persone con disabilità. Coprono una varietà di disabilità, tra cui quelle visive, uditive, fisiche, vocali, cognitive, di linguaggio, di apprendimento e neurologiche. Sebbene queste linee guida tengano conto di molti problemi, non sono in grado di soddisfare i bisogni di persone con tutti i tipi, gradi e combinazioni di disabilità.
 
-Le WCAG 2.0 sono in vigore dall'11 Dicembre 2008 e definiscono il nuovo standard da considerare in fatto di accessibilità. Le WCAG 2.0 sono strutturate in **quattro principi fondamentali:** un sito deve essere **percepibile, utilizzabile, comprensibile e robusto.**
+Le **Web Content Accessibility Guidelines (WCAG)** stabiliscono le regole per rendere i contenuti web accessibili a persone con disabilità, includendo problemi visivi, uditivi, fisici, cognitivi e neurologici.
 
-Percepibile significa che le informazioni e i componenti dell'interfaccia utente devono essere presentati agli utenti in modi che possano essere percepiti. Ciò include fornire alternative testuali per qualsiasi contenuto non di testo, alternative per i tipi di media temporizzati, creare contenuti che possano essere rappresentati in modalità differenti senza perdite di informazioni e rendere semplice per gli utenti la visione e l'ascolto dei contenuti, separando i livelli di primo piano e di sfondo.
+Le **WCAG 2.0**, in vigore dall’11 dicembre 2008, si basano su quattro principi fondamentali:
 
-Utilizzabile significa che i componenti dell'interfaccia utente e la navigazione devono essere utilizzabili. Questo principio richiede che tutte le funzionalità siano disponibili tramite tastiera, che venga fornito agli utenti tempo sufficiente per leggere ed utilizzare i contenuti, che non vengano sviluppati contenuti che possano causare attacchi epilettici e che vengano fornite funzionalità di supporto per navigare, trovare contenuti e determinare la propria posizione.
+- **Percepibile:** Le informazioni devono essere presentate in modo che possano essere percepite da tutti gli utenti, inclusi quelli con disabilità sensoriali.
+- **Utilizzabile:** L’interfaccia e la navigazione devono essere intuitive e accessibili anche a chi ha difficoltà motorie.
+- **Comprensibile:** Il contenuto deve essere chiaro e prevedibile, aiutando l’utente a evitare e correggere errori.
+- **Robusto:** I contenuti devono essere compatibili con le tecnologie assistive e adattabili a software futuri.
 
-Comprensibile significa che le informazioni e l'utilizzo dell'interfaccia utente devono essere comprensibili. Ciò significa rendere il testo leggibile e comprensibile, creare pagine web che appaiano e funzionino in modo prevedibile e aiutare gli utenti ad evitare gli errori ed agevolarli nella eventuale correzione.
+Le WCAG prevedono tre livelli di conformità:
+- **Livello A:** Requisiti di base soddisfatti.
+- **Livello AA:** Maggiore accessibilità per la maggior parte degli utenti.
+- **Livello AAA:** Massima accessibilità, ma difficile da implementare in tutti i contesti.
 
-Robusto significa che i contenuti devono essere abbastanza robusti da poter essere interpretati in modo affidabile da una vasta gamma di programmi utente, comprese le tecnologie assistive. Ciò significa garantire la massima compatibilità con i programmi utente attuali e futuri, comprese le tecnologie assistive.
+Le **WCAG 2.1**, pubblicate il 5 giugno 2018, ampliano le WCAG 2.0 con miglioramenti per il web mobile e nuove linee guida su:
+- **Orientamento:** Ottimizzazione per dispositivi mobili e per chi usa tecnologie assistive.
+- **Scopo degli input:** Facilitazione della compilazione automatica dei campi per utenti con difficoltà cognitive.
+- **Ricalcolo del flusso:** Evitare la necessità di scorrimento orizzontale per migliorare l’accessibilità.
+- **Contrasto nei contenuti non testuali:** Maggiore visibilità per elementi dell’interfaccia e grafici.
+- **Spaziatura del testo:** Possibilità di personalizzare interlinea e spaziatura per migliorare la leggibilità.
+- **Interazioni con Hover o Focus:** Accesso facilitato ai contenuti che appaiono al passaggio del mouse o all’attivazione tramite tastiera.
 
-Le WCAG 2.0 prevedono tre livelli di conformità:
+### **Normativa italiana**
+In Italia, la **Legge Stanca (L. 4/2004)** impone alla Pubblica Amministrazione e ad altri enti di conformarsi agli standard di accessibilità.  
 
-- Livello A: tutti i requisiti di livello A soddisfatti.
-- Livello AA: tutti i requisiti di livello A e AA soddisfatti.
-- Livello AAA: tutti i requisiti di livello A, AA e AAA soddisfatti.
+Le **Linee guida AgID 2020**, pubblicate il 9 gennaio 2020, aggiornano la normativa italiana adeguandola alla Direttiva Europea 2016/2102 e alla nuova norma **UNI EN 301549**, che elenca i requisiti tecnici per siti web e app mobili, basandosi sulle WCAG 2.1.  
 
-Per specificare la conformità raggiunta, è possibile utilizzare una dichiarazione facoltativa con una struttura standard che include la data della dichiarazione, il nome delle linee guida, la versione e l'URI, il livello di conformità soddisfatto, una breve descrizione delle pagine web, l'elenco delle tecnologie web su cui si basano i contenuti e l'eventuale logo di conformità.
+Queste disposizioni prevedono che le PA:
+- Effettuino verifiche di accessibilità sugli strumenti informatici.
+- Pubblicano una **Dichiarazione di Accessibilità**.
+- Predispongano un **Meccanismo di Feedback** per segnalare problemi di accessibilità.
 
-Le WCAG 2.1, pubblicate il 5 giugno 2018, sono un'estensione delle WCAG 2.0 e si concentrano su miglioramenti per l'accessibilità web e mobile.
+Se una PA non risolve un problema di accessibilità entro 30 giorni, è possibile rivolgersi al **Difensore Civico per il Digitale**, che supervisiona il rispetto delle normative.
 
-Le WCAG 2.1 introducono nuove linee guida per:
+Le nuove disposizioni impongono inoltre che i contenuti digitali prodotti dalle PA siano accessibili e che gli acquisti pubblici siano limitati a prodotti dichiarati conformi agli standard di accessibilità.
 
-- Orientamento: facilitare l'accessibilità di utenti con disabilità che utilizzano per la navigazione in rete dei dispositivi montati su supporti.
-- Identificare lo scopo degli input: favorire l'auto-compilazione dei campi per supportare le persone con disabilità cognitive.
-- Ricalcolo del Flusso: evitare template che necessitano dello scorrimento orizzontale per consentire l'accesso dei contenuti a utenti ipovedenti.
-- Contrasto in contenuti non testuali: estendere i criteri sul contrasto del colore anche all'interfaccia utente e agli altri elementi grafici.
-- Spaziatura del testo: utilizzare linguaggi di markup che supportino specifiche proprietà di stile per evitare la perdita di contenuti o funzionalità quando si impostano modifiche come altezza delle linee e spaziatura tra lettere e parole.
-- Contenuti con Hover o Focus: permettere a tutti gli utenti di interagire con le informazioni aggiuntive che appaiono puntando il mouse o il focus della tastiera su specifiche aree.
-
-Le WCAG 2.1 introducono anche nuove linee guida per il livello di conformità A, tra cui:
-
-- Movimenti del puntatore: consentire la gestione delle funzionalità con un puntatore singolo per gli utenti impossibilitati a eseguire gesti complessi.
-- Cancellazione delle azioni del puntatore: evitare l'attivazione accidentale di contenuti da parte di utenti con disabilità.
-- Etichetta del nome: per tutte le componenti dell'interfaccia utente con etichette, il nome deve contenere il testo rappresentato visivamente.
-- Azionamento del movimento: fornire componenti dell'interfaccia utente che sostituiscano le azioni fisiche per i siti e le applicazioni che richiedono gesti fisici più articolati.
-- Messaggi di stato: i messaggi automatici devono essere comunicati anche dalle tecnologie assistive.
-
-In Italia, la Legge Stanca (Legge 4 del 9 gennaio 2004) ha reso obbligatorio per la Pubblica Amministrazione e altri enti l'adeguamento dei siti web ai principi di accessibilità.
-
-Le Linee guida Agid 2020, pubblicate il 9 gennaio 2020, aggiornano la normativa in materia di accessibilità recependo i dettami della Direttiva Europea n. 2016/2102. [16, 17] Le Linee guida estendono gli obblighi di accessibilità anche alle app mobili e fanno riferimento alla nuova Norma Tecnica UNI EN 301549, che elenca i requisiti tecnici dei siti web e delle app mobili, in conformità alle WCAG 2.1.
-
-Le nuove disposizioni prevedono che le PA effettuino le verifiche dell'accessibilità degli strumenti informatici, compilino e pubblichino una Dichiarazione di Accessibilità e predispongano un Meccanismo di Feedback.
-
-L'aggiornamento della legge Stanca introduce anche la verifica della fruibilità tramite test di usabilità per l'ICT.
-
-La Dichiarazione di accessibilità, obbligatoria per ogni sito web e applicazione mobile, deve essere pubblicata tramite una procedura online resa disponibile da AGID.
-
-In caso di problemi di accessibilità, è necessario contattare la PA responsabile del sito web o dell'applicazione mobile. Se la PA non risolve il problema in modo adeguato entro 30 giorni, è possibile rivolgersi al Difensore Civico per il Digitale.
-
-AgID effettua il monitoraggio dei siti web e delle applicazioni mobili e, in caso di anomalie di conformità, inoltra nota al Difensore Civico per il Digitale.
-
-La normativa prevede che gli acquisti delle PA siano limitati a prodotti dichiarati accessibili e che i contenuti prodotti e pubblicati nei siti istituzionali e diffusi tramite applicazioni mobili siano accessibili.
+---
 
 ## Storia dell'Interazione Uomo-Computer
 Assolutamente! Ecco la timeline dettagliata e il cast di personaggi basati sui documenti forniti:
