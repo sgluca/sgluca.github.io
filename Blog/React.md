@@ -36,3 +36,17 @@ Build AAB:
 ```bash
 gradlew.bat bundleRelease
 ```
+posizione dell'output: `android\app\build\outputs\bundle\release`
+
+#### Generare la chiave
+
+Genera il keystore
+```bash
+keytool -genkeypair -v -keystore release-key.keystore -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
+```
+
+Genera il file .pem da carica sul play store
+
+```bash
+keytool -export -rfc -keystore release-key.keystore -file upload_certificate.pem -alias my-key-alias
+```
