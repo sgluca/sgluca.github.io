@@ -6,5 +6,6 @@ Ecco i documenti disponibili:
 - [📄 Gestione IIS](./Gestione IIS.md)
 - [📄 Interazione Uomo-Macchina](./IUM.md)
 - [📄 Pulizia file MD](./PuliziaFile.md)
+- [📄 React](./React.md)
 
 Clicca su un file per aprirlo!
