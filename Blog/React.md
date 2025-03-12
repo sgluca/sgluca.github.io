@@ -1,4 +1,51 @@
-# React
+## Gestione dettagli applicazione
+
+Per creare una nuova versione dell'applicazione da caricare sugli store, bisogna aggiornare l'`app.json`:
+
+```json
+{
+    "expo": {
+        "name": "Eco GAIA", // Nome dell'applicazione
+        "slug": "EcoGAIA",
+        "version": "2.0.0", // Versione dell'applicazione
+        "orientation": "portrait",
+        "icon": "./assets/images/adaptive-icon.png", // Percorso dell'icona dell'applicazione
+        ...
+        "ios": {
+            "supportsTablet": false,
+            "bundleIdentifier": "it.gaia.rdm", // Identificatore del bundle per iOS
+            "buildNumber": "2.0.2", // Numero di build per iOS, da incrementare ad ogni caricamento sullo store
+            "infoPlist": {
+                ...
+            }
+        },
+        "android": {
+            "adaptiveIcon": { // Configurazione dell'icona adattiva per Android
+                "foregroundImage": "./assets/images/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "it.gaia.rdm", // Identificatore del pacchetto per Android
+            "versionCode": 7, // Numero di versione per Android, da incrementare ad ogni caricamento sul Play Store
+            "permissions": [
+                ...
+            ]
+        },
+        ...
+        "plugins": [
+            "expo-router",
+            [
+                "expo-splash-screen", // Configurazione dello splash screen
+                {
+                    "image": "./assets/images/splash-icon.png",
+                    "imageWidth": 200,
+                    "resizeMode": "contain",
+                    "backgroundColor": "#ffffff"
+                }
+            ]
+        ]
+    }
+}
+```
 
 ## Build App
 
@@ -6,7 +53,7 @@ Prima di tutto:
 ```bash
 npx expo prebuild
 ```
-Genera gli assets delle immagini, aggiorna il manifest...
+Genera gli assets delle immagini, aggiorna il manifest, i numeri di versione...
 
 ### Android
 
@@ -25,22 +72,23 @@ Per configurare l'ambiente di sviluppo Android, segui questi passaggi:
 
 *sostituire `<username>` con il proprio nome utente*
 
-3. **Naviga nella cartella Android**:
+
+4. **Naviga nella cartella Android**:
 
 ```bash
 cd android
 ```
 
-4. **Build APK**:
+5. **Build APK**:
 
 ```bash
 gradlew assembleRelease
 ```
 
-5. **Build AAB**:
+6. **Build AAB**:
 
 ```bash
-gradlew.bat bundleRelease
+./gradlew app:bundleRelease
 ```
 
 L'output sarà disponibile nella cartella `android\app\build\outputs\bundle\release`.
