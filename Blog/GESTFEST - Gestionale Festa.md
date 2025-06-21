@@ -27,7 +27,9 @@ Questa sezione è dedicata a:
 
 * Registrare le **presenze** alla serata (bambini, animatori, volontari).
 * Segnalare **assenze certe**.
+
 ![Schermata di inserimento di GESTFEST](./img/GESTFEST-1.png)
+
 #### Procedura:
 
 1. **Scegli il tipo di registrazione** cliccando su \[A]:
@@ -74,7 +76,7 @@ In caso di **errore nella prenotazione** o cambio di idea, questa sezione permet
 Sezione per la consultazione delle prenotazioni.
 
 #### Funzionalità disponibili:
-[Schermata Funzionalità](./img/GESTFEST-2.png)
+![Schermata Funzionalità](./img/GESTFEST-2.png)
 
 * **Bambini in attesa**: mostra i bambini che **non hanno ancora prenotato** e **non hanno comunicato l’assenza**.
 * **Elenco animatori in attesa**: come sopra, ma per gli **animatori**.
@@ -90,7 +92,8 @@ In questa schermata è possibile **distribuire i buoni** ai partecipanti.
 
 ### ⚙️ AMMINISTRAZIONE
 
-[Schermata Amministrazione](./img/GESTFEST-4.png)
+![Schermata Amministrazione](./img/GESTFEST-4.png)
+
 Questa sezione è dedicata a funzionalità speciali, da usare solo in caso di necessità:
 
 * **\[BYPASS INSERIMENTO Bambino]**: per aggiungere un bambino non ancora registrato.
