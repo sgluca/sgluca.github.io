@@ -1,3 +1,5 @@
+# Pubblicazione App ReactNative 
+
 ## Gestione dettagli applicazione
 
 Per creare una nuova versione dell'applicazione da caricare sugli store, bisogna aggiornare l'`app.json`:
@@ -106,6 +108,48 @@ keytool -genkeypair -v -keystore release-key.keystore -keyalg RSA -keysize 2048 
 ```bash
 keytool -export -rfc -keystore release-key.keystore -file upload_certificate.pem -alias my-key-alias
 ```
+
+--- 
+#### Come firmare l'app?
+1. Assicurati di avere il file APK o AAB generato (di solito in `android/app/build/outputs/apk/release/` o release).
+
+2. Verifica di avere il keystore (nel tuo caso: release-key.keystore).
+
+3. Aggiungi le informazioni del keystore nel file gradle.properties:
+```
+MYAPP_UPLOAD_STORE_FILE=release-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=your-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=your-store-password
+MYAPP_UPLOAD_KEY_PASSWORD=your-key-password
+```
+Sostituisci `your-key-alias`, `your-store-password`, e `your-key-password` con i tuoi dati reali.
+
+4. Modifica il file build.gradle nella sezione `android > signingConfigs`:
+```groovy
+signingConfigs {
+    release {
+        storeFile file(MYAPP_UPLOAD_STORE_FILE)
+        storePassword MYAPP_UPLOAD_STORE_PASSWORD
+        keyAlias MYAPP_UPLOAD_KEY_ALIAS
+        keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+    }
+}
+buildTypes {
+    release {
+        signingConfig signingConfigs.release
+        // ...existing code...
+    }
+}
+```
+--- 
+5. Ricostruisci l’app in modalità release:
+```powershell
+cd android
+./gradlew assembleRelease
+```
+Troverai l’APK firmato in `android/app/build/outputs/apk/release/app-release.apk`.
+
+
 
 ### iOS
 

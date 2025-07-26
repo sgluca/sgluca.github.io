@@ -1,0 +1,178 @@
+# Notifiche App ReactNative
+
+## Passa a Bare Workflow
+
+Se hai iniziato il progetto con Expo Managed, esegui:
+
+```powershell
+npx expo prebuild
+```
+
+Questo ti trasformerà il progetto in Bare Workflow, permettendoti di usare librerie native.
+
+## Installa le dipendenze Firebase
+
+```powershell
+npm install @react-native-firebase/app @react-native-firebase/messaging
+```
+
+## Configura Firebase
+
+- Android
+  Vai su Firebase Console, crea il progetto e aggiungi la tua app Android.
+  Scarica `google-services.json` e inseriscilo in `android/app/`.
+  Modifica `android/build.gradle` e `android/app/build.gradle` seguendo la documentazione di react-native-firebase.
+
+- iOS
+  Aggiungi la tua app iOS su Firebase, scarica `GoogleService-Info.plist` e inseriscilo in ios/.
+  Installa i pod:
+  bash
+
+```powershell
+cd ios
+pod install
+```
+
+## Richiedi i permessi e ottieni il token FCM
+
+Sull'App.js
+
+```js
+useEffect(() => {
+  messaging().requestPermission();
+  messaging()
+    .getToken()
+    .then((token) => {
+      console.log("FCM token:", token);
+    });
+  messaging().subscribeToTopic("all");
+  const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    console.log("A new FCM message arrived!", remoteMessage);
+    Alert.alert(
+      remoteMessage.notification?.title
+        ? remoteMessage.notification?.title
+        : "Notifiche",
+      remoteMessage.notification?.body
+    );
+  });
+  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    console.log("Message handled in the background!", remoteMessage);
+  });
+  messaging().onNotificationOpenedApp((remoteMessage) => {
+    console.log(
+      "Notification caused app to open from background state:",
+      remoteMessage.notification
+    );
+  });
+
+  messaging().onNotificationOpenedApp((remoteMessage) => {
+    // Qui gestisci l'ID della notifica
+    console.log("Notifica aperta:", remoteMessage);
+    // Naviga, mostra dettagli, ecc.
+  });
+
+  // Se l'app è STATA aperta tramite notifica (da stato terminated)
+  messaging()
+    .getInitialNotification()
+    .then((remoteMessage) => {
+      console.log("App avviata tramite notifica:", remoteMessage);
+      // Naviga, mostra dettagli, ecc.
+    });
+
+  return unsubscribe;
+}, []);
+```
+
+## Modificare l'app.json
+
+```json
+{
+    "expo":
+    {
+        "notification": {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "iosDisplayInForeground": true,
+          "androidMode": "default"
+        },
+        "ios":{
+            [...]
+            "entitlements": {
+                "aps-environment": "production"
+            },
+            "infoPlist": {
+                "UIBackgroundModes": ["remote-notification"]
+            },
+            "googleServicesFile": "./GoogleService-Info.plist"
+        },
+        "android":{
+            "googleServicesFile": "./google-services.json",
+            [...]
+        }
+        "plugins": [
+            [...]
+            "@react-native-firebase/app",
+            "@react-native-firebase/messaging",
+        ]
+    }
+}
+```
+
+
+## React Native CLI - Android Setup
+Download the `google-services.json` file and place it inside of your project at the following location: `/android/app/google-services.json`.
+Configure Firebase with Android credentials
+
+To allow Firebase on Android to use the credentials, the google-services plugin must be enabled on the project. This requires modification to two files in the Android directory.
+
+First, add the google-services plugin as a dependency inside of your `/android/build.gradle` file:
+
+```java
+buildscript {
+  dependencies {
+    // ... other dependencies
+    classpath 'com.google.gms:google-services:4.4.3'
+    // Add me --- /\
+  }
+}
+```
+
+Lastly, execute the plugin by adding the following to your `/android/app/build.gradle` file:
+```java
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services' // <- Add this line
+```
+
+## React Native CLI - iOS Setup
+
+### Generating iOS credentials
+
+On the Firebase console, add a new iOS application and enter your projects details. The "iOS bundle ID" must match your local project bundle ID. The bundle ID can be found within the "General" tab when opening the project with Xcode.
+
+Download the `GoogleService-Info.plist` file.
+
+Using Xcode, open the projects  `/ios/{projectName}.xcworkspace`
+Right click on the project name and "Add files" to the project, as demonstrated below:
+
+Select the downloaded GoogleService-Info.plist file from your computer, and ensure the "Copy items if needed" checkbox is enabled.
+
+### Configure Firebase with iOS credentials (react-native 0.77+)
+
+To allow Firebase on iOS to use the credentials, the Firebase iOS SDK must be configured during the bootstrap phase of your application.
+
+To do this, open your `/ios/{projectName}/AppDelegate.swift` file and add the following:
+
+At the top of the file, import the Firebase SDK right after `'import ReactAppDependencyProvider'`:
+```swift
+import Firebase
+```
+
+Within your existing `application` method, add the following to the top of the method:
+```swift
+override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+  // Add me --- \/
+  FirebaseApp.configure()
+  // Add me --- /\
+  // ...
+}
+```
