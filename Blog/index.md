@@ -6,7 +6,8 @@ Ecco i documenti disponibili:
 - [📄 GESTionale FESTa Estate Ragazzi](./GESTFEST - Gestionale Festa.md)
 - [📄 Gestione IIS](./Gestione IIS.md)
 - [📄 Interazione Uomo-Macchina](./IUM.md)
+- [📄 Notifiche App ReactNative](./Notifiche.md)
 - [📄 Pulizia file MD](./PuliziaFile.md)
-- [📄 Gestione dettagli applicazione](./React.md)
+- [📄 Pubblicazione App ReactNative](./React.md)
 
 Clicca su un file per aprirlo!
