@@ -1,5 +1,6 @@
 import os
 import re
+from urllib.parse import quote
 
 folders = ["Analisi", "Blog"]  # Add more folders as needed
 
@@ -46,7 +47,7 @@ def extract_title_from_markdown(filepath):
             if in_front_matter:
                 continue
             if line.startswith("#"):
-                return line.strip().replace("#", "").strip()
+                return line.strip().lstrip("#").strip()
     return "Untitled"
 
 for folder in folders:
@@ -73,7 +74,7 @@ Ecco i documenti disponibili:
                 title = extract_title_from_markdown(f"{folder}/{file}")
                 emoji = get_article_emoji(file)
                 # URL encode the filename for proper linking
-                encoded_file = file.replace(" ", "%20").replace(".md", ".html")
+                encoded_file = quote(file.replace(".md", ".html"))
                 f.write(f'  <a href="./{encoded_file}" class="article-card">\n')
                 f.write(f'    <div class="article-icon">{emoji}</div>\n')
                 f.write(f'    <div class="article-title">{title} <span class="article-arrow">→</span></div>\n')
