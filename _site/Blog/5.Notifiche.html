@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Implementazione delle notifiche in React Native">
+    <meta name="author" content="Luca Saglietti">
+    <title>Notifiche App ReactNative</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for markdown content */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, white 2px, transparent 2px);
+            background-size: 100px 100px, 150px 150px;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .breadcrumb {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            border-color: white;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        .markdown-content {
+            background: var(--bg-white);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .markdown-content h1 {
+            display: none; /* Hide the h1 since we show it in the header */
+        }
+
+        .markdown-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .markdown-content li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content li a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .markdown-content li a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .markdown-content code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.95em;
+            color: var(--secondary-color);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .markdown-content pre {
+            background: var(--text-dark);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: #f8f8f2;
+            font-size: 0.9rem;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .markdown-content th, .markdown-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .markdown-content th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .markdown-content tr:hover {
+            background: var(--bg-light);
+        }
+
+        .markdown-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .markdown-content a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Article list specific styles */
+        .article-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: var(--bg-white);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .article-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .article-arrow {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover .article-arrow {
+            transform: translateX(4px);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .markdown-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1.5rem;
+            }
+
+            .page-header {
+                padding: 3rem 0 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">Notifiche App ReactNative</h1>
+            <div class="breadcrumb">
+                <a href="/">🏠 Home</a>
+                
+                <span>/</span>
+                <a href="/Blog/">✍️ Blog</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        
+        <a href="/Blog/" class="back-button">
+            ← Torna indietro
+        </a>
+        
+
+        <div class="markdown-content">
+            <h1 id="notifiche-app-reactnative">Notifiche App ReactNative</h1>
+
+<p>Vedi anche https://rnfirebase.io/</p>
+
+<h2 id="passa-a-bare-workflow">Passa a Bare Workflow</h2>
+
+<p>Se hai iniziato il progetto con Expo Managed, esegui:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">npx</span><span class="w"> </span><span class="nx">expo</span><span class="w"> </span><span class="nx">prebuild</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Questo ti trasformerà il progetto in Bare Workflow, permettendoti di usare librerie native.</p>
+
+<h2 id="installa-le-dipendenze-firebase">Installa le dipendenze Firebase</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">npm</span><span class="w"> </span><span class="nx">install</span><span class="w"> </span><span class="err">@</span><span class="nx">react-native-firebase/app</span><span class="w"> </span><span class="err">@</span><span class="nx">react-native-firebase/messaging</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="configura-firebase">Configura Firebase</h2>
+
+<ul>
+  <li>
+    <p>Android
+Vai su Firebase Console, crea il progetto e aggiungi la tua app Android.
+Scarica <code class="language-plaintext highlighter-rouge">google-services.json</code> e inseriscilo in <code class="language-plaintext highlighter-rouge">android/app/</code>.
+Modifica <code class="language-plaintext highlighter-rouge">android/build.gradle</code> e <code class="language-plaintext highlighter-rouge">android/app/build.gradle</code> seguendo la documentazione di react-native-firebase.</p>
+  </li>
+  <li>
+    <p>iOS
+Aggiungi la tua app iOS su Firebase, scarica <code class="language-plaintext highlighter-rouge">GoogleService-Info.plist</code> e inseriscilo in ios/.
+Installa i pod:
+bash</p>
+  </li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cd</span><span class="w"> </span><span class="nx">ios</span><span class="w">
+</span><span class="n">pod</span><span class="w"> </span><span class="nx">install</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="richiedi-i-permessi-e-ottieni-il-token-fcm">Richiedi i permessi e ottieni il token FCM</h2>
+
+<p>Sull’App.js</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">messaging</span><span class="p">().</span><span class="nx">requestPermission</span><span class="p">();</span>
+  <span class="nx">messaging</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">getToken</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">token</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">FCM token:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">token</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="nx">messaging</span><span class="p">().</span><span class="nx">subscribeToTopic</span><span class="p">(</span><span class="dl">"</span><span class="s2">all</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">messaging</span><span class="p">().</span><span class="nx">onMessage</span><span class="p">(</span><span class="k">async</span> <span class="p">(</span><span class="nx">remoteMessage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">A new FCM message arrived!</span><span class="dl">"</span><span class="p">,</span> <span class="nx">remoteMessage</span><span class="p">);</span>
+    <span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span>
+      <span class="nx">remoteMessage</span><span class="p">.</span><span class="nx">notification</span><span class="p">?.</span><span class="nx">title</span>
+        <span class="p">?</span> <span class="nx">remoteMessage</span><span class="p">.</span><span class="nx">notification</span><span class="p">?.</span><span class="nx">title</span>
+        <span class="p">:</span> <span class="dl">"</span><span class="s2">Notifiche</span><span class="dl">"</span><span class="p">,</span>
+      <span class="nx">remoteMessage</span><span class="p">.</span><span class="nx">notification</span><span class="p">?.</span><span class="nx">body</span>
+    <span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">messaging</span><span class="p">().</span><span class="nx">setBackgroundMessageHandler</span><span class="p">(</span><span class="k">async</span> <span class="p">(</span><span class="nx">remoteMessage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Message handled in the background!</span><span class="dl">"</span><span class="p">,</span> <span class="nx">remoteMessage</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">messaging</span><span class="p">().</span><span class="nx">onNotificationOpenedApp</span><span class="p">((</span><span class="nx">remoteMessage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+      <span class="dl">"</span><span class="s2">Notification caused app to open from background state:</span><span class="dl">"</span><span class="p">,</span>
+      <span class="nx">remoteMessage</span><span class="p">.</span><span class="nx">notification</span>
+    <span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">messaging</span><span class="p">().</span><span class="nx">onNotificationOpenedApp</span><span class="p">((</span><span class="nx">remoteMessage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Qui gestisci l'ID della notifica</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Notifica aperta:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">remoteMessage</span><span class="p">);</span>
+    <span class="c1">// Naviga, mostra dettagli, ecc.</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Se l'app è STATA aperta tramite notifica (da stato terminated)</span>
+  <span class="nx">messaging</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">getInitialNotification</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">remoteMessage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">App avviata tramite notifica:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">remoteMessage</span><span class="p">);</span>
+      <span class="c1">// Naviga, mostra dettagli, ecc.</span>
+    <span class="p">});</span>
+
+  <span class="k">return</span> <span class="nx">unsubscribe</span><span class="p">;</span>
+<span class="p">},</span> <span class="p">[]);</span>
+</code></pre></div></div>
+
+<h2 id="modificare-lappjson">Modificare l’app.json</h2>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"expo"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"notification"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"./assets/icon.png"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#ffffff"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"iosDisplayInForeground"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"androidMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"ios"</span><span class="p">:{</span><span class="w">
+            </span><span class="p">[</span><span class="err">...</span><span class="p">]</span><span class="w">
+            </span><span class="nl">"entitlements"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"aps-environment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"production"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"infoPlist"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"UIBackgroundModes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"remote-notification"</span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"googleServicesFile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"./GoogleService-Info.plist"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"android"</span><span class="p">:{</span><span class="w">
+            </span><span class="nl">"googleServicesFile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"./google-services.json"</span><span class="p">,</span><span class="w">
+            </span><span class="p">[</span><span class="err">...</span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+        </span><span class="nl">"plugins"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">[</span><span class="err">...</span><span class="p">]</span><span class="w">
+            </span><span class="s2">"@react-native-firebase/app"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"@react-native-firebase/messaging"</span><span class="p">,</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="react-native-cli---android-setup">React Native CLI - Android Setup</h2>
+<p>Download the <code class="language-plaintext highlighter-rouge">google-services.json</code> file and place it inside of your project at the following location: <code class="language-plaintext highlighter-rouge">/android/app/google-services.json</code>.
+Configure Firebase with Android credentials</p>
+
+<p>To allow Firebase on Android to use the credentials, the google-services plugin must be enabled on the project. This requires modification to two files in the Android directory.</p>
+
+<p>First, add the google-services plugin as a dependency inside of your <code class="language-plaintext highlighter-rouge">/android/build.gradle</code> file:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buildscript</span> <span class="o">{</span>
+  <span class="n">dependencies</span> <span class="o">{</span>
+    <span class="c1">// ... other dependencies</span>
+    <span class="n">classpath</span> <span class="err">'</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">gms</span><span class="o">:</span><span class="n">google</span><span class="o">-</span><span class="nl">services:</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="err">'</span>
+    <span class="c1">// Add me --- /\</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Lastly, execute the plugin by adding the following to your <code class="language-plaintext highlighter-rouge">/android/app/build.gradle</code> file:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">apply</span> <span class="nl">plugin:</span> <span class="err">'</span><span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">application</span><span class="err">'</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="err">'</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">gms</span><span class="o">.</span><span class="na">google</span><span class="o">-</span><span class="n">services</span><span class="err">'</span> <span class="c1">// &lt;- Add this line</span>
+</code></pre></div></div>
+
+<h2 id="react-native-cli---ios-setup">React Native CLI - iOS Setup</h2>
+
+<h3 id="generating-ios-credentials">Generating iOS credentials</h3>
+
+<p>On the Firebase console, add a new iOS application and enter your projects details. The “iOS bundle ID” must match your local project bundle ID. The bundle ID can be found within the “General” tab when opening the project with Xcode.</p>
+
+<p>Download the <code class="language-plaintext highlighter-rouge">GoogleService-Info.plist</code> file.</p>
+
+<p>Using Xcode, open the projects  <code class="language-plaintext highlighter-rouge">/ios/{projectName}.xcworkspace</code>
+Right click on the project name and “Add files” to the project, as demonstrated below:</p>
+
+<p>Select the downloaded GoogleService-Info.plist file from your computer, and ensure the “Copy items if needed” checkbox is enabled.</p>
+
+<h3 id="configure-firebase-with-ios-credentials-react-native-077">Configure Firebase with iOS credentials (react-native 0.77+)</h3>
+
+<p>To allow Firebase on iOS to use the credentials, the Firebase iOS SDK must be configured during the bootstrap phase of your application.</p>
+
+<p>To do this, open your <code class="language-plaintext highlighter-rouge">/ios/{projectName}/AppDelegate.swift</code> file and add the following:</p>
+
+<p>At the top of the file, import the Firebase SDK right after <code class="language-plaintext highlighter-rouge">'import ReactAppDependencyProvider'</code>:</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">Firebase</span>
+</code></pre></div></div>
+
+<p>Within your existing <code class="language-plaintext highlighter-rouge">application</code> method, add the following to the top of the method:</p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="n">_</span> <span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span> <span class="nv">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIApplication</span><span class="o">.</span><span class="kt">LaunchOptionsKey</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+  <span class="c1">// Add me --- \/</span>
+  <span class="kt">FirebaseApp</span><span class="o">.</span><span class="nf">configure</span><span class="p">()</span>
+  <span class="c1">// Add me --- /\</span>
+  <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="podfile">PodFile</h3>
+<p>Error:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Swift pod `FirebaseCoreInternal` depends upon `GoogleUtilities`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers =&gt; true` for particular dependencies.
+</code></pre></div></div>
+
+<p>We need also to update ios\ßPodfile</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[...]
+target 'PdBConferimenti' do
+  use_expo_modules!
+  
+  pod 'Firebase', :modular_headers =&gt; true
+  pod 'FirebaseCoreInternal', :modular_headers =&gt; true
+  pod 'GoogleUtilities', :modular_headers =&gt; true
+  pod 'FirebaseCore', :modular_headers =&gt; true
+[...]
+</code></pre></div></div>
+
+<h2 id="test-invio-notifiche">Test Invio notifiche</h2>
+<p>per testare l’invio di notifiche è possibile usare questo script pyhton.</p>
+
+<p>Installa le dipendenze:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>firebase_admin
+</code></pre></div></div>
+
+<p>sendNotif.py:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">firebase_admin</span>
+<span class="kn">from</span> <span class="nn">firebase_admin</span> <span class="kn">import</span> <span class="n">credentials</span><span class="p">,</span> <span class="n">messaging</span>
+
+<span class="n">cred</span> <span class="o">=</span> <span class="n">credentials</span><span class="p">.</span><span class="n">Certificate</span><span class="p">(</span><span class="s">"conferimenti-nebbiolo.json"</span><span class="p">)</span>
+<span class="n">firebase_admin</span><span class="p">.</span><span class="n">initialize_app</span><span class="p">(</span><span class="n">cred</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">send_fcm_to_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="s">"""Invia una notifica FCM a tutti gli iscritti a un topic."""</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">messaging</span><span class="p">.</span><span class="n">Message</span><span class="p">(</span>
+        <span class="n">notification</span><span class="o">=</span><span class="n">messaging</span><span class="p">.</span><span class="n">Notification</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">body</span>
+        <span class="p">),</span>
+        <span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">data</span> <span class="k">if</span> <span class="n">data</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">messaging</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Notifica inviata con successo: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Errore nell</span><span class="se">\'</span><span class="s">invio della notifica: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="c1"># Esempio di utilizzo:
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">send_fcm_to_topic</span><span class="p">(</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s">"all"</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s">"Titolo Notifica"</span><span class="p">,</span>
+        <span class="n">body</span><span class="o">=</span><span class="s">"Testo della notifica"</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">"ticketId"</span><span class="p">:</span> <span class="s">"3"</span><span class="p">}</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>per eseguire:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>py sendNotif.py
+</code></pre></div></div>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Luca Saglietti. Fatto con ❤️ e ☕</p>
+        </div>
+    </footer>
+</body>
+</html>

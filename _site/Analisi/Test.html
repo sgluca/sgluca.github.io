@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guida alla gestione e organizzazione dei test del codice">
+    <meta name="author" content="Luca Saglietti">
+    <title>Gestione Test del Codice</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for markdown content */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, white 2px, transparent 2px);
+            background-size: 100px 100px, 150px 150px;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .breadcrumb {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            border-color: white;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        .markdown-content {
+            background: var(--bg-white);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .markdown-content h1 {
+            display: none; /* Hide the h1 since we show it in the header */
+        }
+
+        .markdown-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .markdown-content li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content li a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .markdown-content li a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .markdown-content code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.95em;
+            color: var(--secondary-color);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .markdown-content pre {
+            background: var(--text-dark);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: #f8f8f2;
+            font-size: 0.9rem;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .markdown-content th, .markdown-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .markdown-content th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .markdown-content tr:hover {
+            background: var(--bg-light);
+        }
+
+        .markdown-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .markdown-content a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Article list specific styles */
+        .article-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: var(--bg-white);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .article-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .article-arrow {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover .article-arrow {
+            transform: translateX(4px);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .markdown-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1.5rem;
+            }
+
+            .page-header {
+                padding: 3rem 0 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">Gestione Test del Codice</h1>
+            <div class="breadcrumb">
+                <a href="/">🏠 Home</a>
+                
+                <span>/</span>
+                <a href="/Analisi/">🔍 Analisi</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        
+        <a href="/Analisi/" class="back-button">
+            ← Torna indietro
+        </a>
+        
+
+        <div class="markdown-content">
+            <h1 id="gestione-test-del-codice">Gestione Test del Codice</h1>
+<p>In vista della certificazione ISO, è necessario impostare e definire una serie di test da eseguire sul codice per garantirne il corretto funzionamento e il rispetto degli standard di qualità.</p>
+
+<p>Le principali aree da testare sono:</p>
+<ul>
+  <li>Interazioni con il database e algoritmi</li>
+  <li>User Interface (UI)</li>
+  <li>Possibili vulnerabilità</li>
+</ul>
+
+<h2 id="interazioni-con-il-database--algoritmi">Interazioni con il database / algoritmi</h2>
+<p>Per testare in modo automatico le interazioni con il database e verificare il corretto funzionamento degli algoritmi, si suggerisce di utilizzare UnitTest che possano validare il comportamento dei controller. Questo test viene eseguito seguendo le linee guida interne, secondo cui la logica applicativa deve essere contenuta all’interno dei controller.</p>
+
+<p>Durante le fasi iniziali di analisi, ho riscontrato alcune difficoltà nella creazione dei test. In particolare, l’uso di oggetti fittizi tramite Moq (mocking) ha presentato delle problematiche:</p>
+<ul>
+  <li><strong>Assenza di interazione effettiva con il database:</strong> Utilizzare oggetti fittizi non consente di rilevare eventuali errori legati al <code class="language-plaintext highlighter-rouge">ChangeTracker</code> o alle operazioni di <code class="language-plaintext highlighter-rouge">Insert/Update/Delete</code>, che potrebbero passare inosservati.</li>
+  <li>Inizializzazione manuale di ogni <code class="language-plaintext highlighter-rouge">DbSet</code>: Ogni DbSet deve essere inizializzato manualmente, il che comporta una gestione complessa del codice di test. Ad esempio, per ogni <code class="language-plaintext highlighter-rouge">DbSet</code> si deve scrivere una configurazione simile alla seguente:
+    <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">mockSet</span><span class="p">.</span><span class="n">As</span><span class="p">&lt;</span><span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">Ditta</span><span class="p">&gt;&gt;().</span><span class="nf">Setup</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">Provider</span><span class="p">).</span><span class="nf">Returns</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Provider</span><span class="p">);</span>
+ <span class="n">mockSet</span><span class="p">.</span><span class="n">As</span><span class="p">&lt;</span><span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">Ditta</span><span class="p">&gt;&gt;().</span><span class="nf">Setup</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">Expression</span><span class="p">).</span><span class="nf">Returns</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Expression</span><span class="p">);</span>
+ <span class="n">mockSet</span><span class="p">.</span><span class="n">As</span><span class="p">&lt;</span><span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">Ditta</span><span class="p">&gt;&gt;().</span><span class="nf">Setup</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="n">ElementType</span><span class="p">).</span><span class="nf">Returns</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">ElementType</span><span class="p">);</span>
+ <span class="n">mockSet</span><span class="p">.</span><span class="n">As</span><span class="p">&lt;</span><span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">Ditta</span><span class="p">&gt;&gt;().</span><span class="nf">Setup</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">m</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()).</span><span class="nf">Returns</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">());</span>
+ <span class="n">_mockContext</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Ditte</span><span class="p">).</span><span class="nf">Returns</span><span class="p">(</span><span class="n">_mockDitteSet</span><span class="p">.</span><span class="n">Object</span><span class="p">);</span>
+</code></pre></div>    </div>
+    <p>Questo approccio deve essere ripetuto per ogni singolo <code class="language-plaintext highlighter-rouge">DbSet</code>, come ad esempio anche per i <code class="language-plaintext highlighter-rouge">LoggerType</code>.</p>
+  </li>
+</ul>
+
+<p>Le problematiche sopra descritte suggeriscono che potrebbe essere più opportuno considerare l’uso di un database reale per i test. Sebbene l’uso di Moq consenta di eseguire i test automaticamente tramite pipeline, potrebbe essere vantaggioso eseguire i test su un database vero, per verificare anche le operazioni più complesse. Una possibile soluzione sarebbe lanciare i test su un server SQL interno, configurato per interfacciarsi con un contenitore Docker.</p>
+
+<h2 id="user-interface">User Interface</h2>
+<p>Testare automaticamente la User Interface (UI) può risultare particolarmente complesso. Sebbene strumenti come Selenium permettano di simulare l’interazione dell’utente con la UI, non vi è mai una garanzia assoluta che il test venga eseguito correttamente. Alcuni elementi, come immagini mancanti o errori nei CSS, potrebbero non essere rilevati, ma potrebbero compromettere l’esperienza dell’utente finale. È quindi importante adottare una strategia combinata che preveda anche il controllo manuale di elementi visivi e funzionali.</p>
+
+<h2 id="possibili-vulnerabilità">Possibili vulnerabilità</h2>
+<p>Per quanto riguarda le vulnerabilità di sicurezza, è consigliabile integrare il tool <a href="https://marketplace.visualstudio.com/items?itemName=dependency-check.dependencycheck">OWASP Dependency</a> Check all’interno delle pipeline di sviluppo. Questo strumento consente di analizzare le dipendenze del progetto e identificare vulnerabilità note nelle librerie utilizzate. Il report generato da OWASP Dependency Check può essere esportato e utilizzato per adottare misure correttive tempestive.</p>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Luca Saglietti. Fatto con ❤️ e ☕</p>
+        </div>
+    </footer>
+</body>
+</html>

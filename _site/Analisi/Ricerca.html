@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Analisi dettagliata dello sviluppo di un motore di ricerca interno per ASP.NET Core">
+    <meta name="author" content="Luca Saglietti">
+    <title>Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for markdown content */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, white 2px, transparent 2px);
+            background-size: 100px 100px, 150px 150px;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .breadcrumb {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            border-color: white;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        .markdown-content {
+            background: var(--bg-white);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .markdown-content h1 {
+            display: none; /* Hide the h1 since we show it in the header */
+        }
+
+        .markdown-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .markdown-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .markdown-content li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content li a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .markdown-content li a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .markdown-content code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.95em;
+            color: var(--secondary-color);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .markdown-content pre {
+            background: var(--text-dark);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: #f8f8f2;
+            font-size: 0.9rem;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .markdown-content th, .markdown-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .markdown-content th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .markdown-content tr:hover {
+            background: var(--bg-light);
+        }
+
+        .markdown-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .markdown-content a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Article list specific styles */
+        .article-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: var(--bg-white);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .article-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .article-arrow {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover .article-arrow {
+            transform: translateX(4px);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .markdown-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1.5rem;
+            }
+
+            .page-header {
+                padding: 3rem 0 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core</h1>
+            <div class="breadcrumb">
+                <a href="/">🏠 Home</a>
+                
+                <span>/</span>
+                <a href="/Analisi/">🔍 Analisi</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        
+        <a href="/Analisi/" class="back-button">
+            ← Torna indietro
+        </a>
+        
+
+        <div class="markdown-content">
+            <h1 id="analisi-dello-sviluppo-di-un-motore-di-ricerca-interno-in-aspnet-core">Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core</h1>
+
+<h2 id="introduzione">Introduzione</h2>
+
+<p>Il motore di ricerca interno ha lo scopo di permettere la ricerca tra i “contenuti” del framework. Tuttavia, il concetto di “contenuto” deve essere definito in modo chiaro per garantire una corretta implementazione. Questo documento fornisce un’analisi dettagliata dello sviluppo del motore di ricerca, dalla definizione dei contenuti fino all’implementazione tecnica.</p>
+
+<h2 id="definizione-dei-contenuti">Definizione dei Contenuti</h2>
+
+<p>Prima di implementare il motore di ricerca, è necessario stabilire cosa si intende per “contenuto”. Una soluzione efficace è l’uso di <strong>Custom Attributes</strong> per marcare le classi e le proprietà che devono essere indicizzate dal motore di ricerca. Inoltre, una tabella di categorie può essere utilizzata per gestire le proprietà da indicizzare.</p>
+
+<h3 id="definizione-di-un-attributo-personalizzato">Definizione di un Attributo Personalizzato</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">AttributeUsage</span><span class="p">(</span><span class="n">AttributeTargets</span><span class="p">.</span><span class="n">Class</span> <span class="p">|</span> <span class="n">AttributeTargets</span><span class="p">.</span><span class="n">Property</span><span class="p">,</span> <span class="n">AllowMultiple</span> <span class="p">=</span> <span class="k">false</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SearchableAttribute</span> <span class="p">:</span> <span class="n">Attribute</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Category</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsBodyPart</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">SearchableAttribute</span><span class="p">(</span><span class="kt">string</span> <span class="n">category</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isBodyPart</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Category</span> <span class="p">=</span> <span class="n">category</span><span class="p">;</span>
+        <span class="n">IsBodyPart</span> <span class="p">=</span> <span class="n">isBodyPart</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">AttributeUsage</span><span class="p">(</span><span class="n">AttributeTargets</span><span class="p">.</span><span class="n">Class</span> <span class="p">|</span> <span class="n">AttributeTargets</span><span class="p">.</span><span class="n">Property</span><span class="p">,</span> <span class="n">AllowMultiple</span> <span class="p">=</span> <span class="k">false</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SearchableKeyAttribute</span> <span class="p">:</span> <span class="n">Attribute</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Index</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">SearchableKeyAttribute</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Index</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="esempio-di-applicazione-dellattributo-ai-contenuti">Esempio di Applicazione dell’Attributo ai Contenuti</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">Searchable</span><span class="p">(</span><span class="s">"Article"</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Article</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="nf">SearchableKey</span><span class="p">(</span><span class="m">0</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">[</span><span class="nf">SearchableKey</span><span class="p">(</span><span class="m">1</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">CategoryKey</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">[</span><span class="nf">Searchable</span><span class="p">(</span><span class="s">"Title"</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Title</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">[</span><span class="nf">Searchable</span><span class="p">(</span><span class="s">"Body"</span><span class="p">,</span> <span class="k">true</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Introduction</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">[</span><span class="nf">Searchable</span><span class="p">(</span><span class="s">"Body"</span><span class="p">,</span> <span class="k">true</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">MainContent</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">[</span><span class="nf">Searchable</span><span class="p">(</span><span class="s">"Body"</span><span class="p">,</span> <span class="k">true</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Conclusion</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="gestione-delle-categorie-e-delle-proprietà-indicizzabili">Gestione delle Categorie e delle Proprietà Indicizzabili</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Category</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">IndexableProperties</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="generazione-dellurl-dai-risultati-di-ricerca">Generazione dell’URL dai Risultati di Ricerca</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">UrlGenerator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">GenerateUrl</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">entity</span><span class="p">,</span> <span class="n">Category</span> <span class="n">category</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">keyProperties</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="nf">GetProperties</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">prop</span> <span class="p">=&gt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">GetCustomAttribute</span><span class="p">&lt;</span><span class="n">SearchableKeyAttribute</span><span class="p">&gt;()</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">OrderBy</span><span class="p">(</span><span class="n">prop</span> <span class="p">=&gt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">GetCustomAttribute</span><span class="p">&lt;</span><span class="n">SearchableKeyAttribute</span><span class="p">&gt;()?.</span><span class="n">Index</span> <span class="p">??</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">prop</span> <span class="p">=&gt;</span> <span class="n">prop</span><span class="p">.</span><span class="nf">GetValue</span><span class="p">(</span><span class="n">entity</span><span class="p">)?.</span><span class="nf">ToString</span><span class="p">())</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="k">value</span> <span class="p">=&gt;</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="k">value</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">keyProperties</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">?</span> <span class="s">$"/</span><span class="p">{</span><span class="n">category</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()}</span><span class="s">/</span><span class="p">{</span><span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="n">keyProperties</span><span class="p">)}</span><span class="s">"</span> <span class="p">:</span> <span class="s">"#"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="gestione-del-body-composto-da-più-proprietà">Gestione del Body Composto da Più Proprietà</h2>
+
+<p>Poiché il “body” può essere suddiviso in più proprietà, il motore di ricerca deve:</p>
+
+<ol>
+  <li><strong>Concatenare le proprietà marcate come <code class="language-plaintext highlighter-rouge">IsBodyPart = true</code></strong> per creare un’unica stringa indicizzabile.</li>
+  <li><strong>Indicizzare e cercare all’interno di questa stringa aggregata</strong>.</li>
+</ol>
+
+<h3 id="creazione-della-stringa-di-body-per-la-ricerca">Creazione della Stringa di Body per la Ricerca</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">SearchHelper</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">AggregateBody</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">content</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">bodyParts</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="nf">GetProperties</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">prop</span> <span class="p">=&gt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">GetCustomAttribute</span><span class="p">&lt;</span><span class="n">SearchableAttribute</span><span class="p">&gt;()?.</span><span class="n">IsBodyPart</span> <span class="p">==</span> <span class="k">true</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">prop</span> <span class="p">=&gt;</span> <span class="n">prop</span><span class="p">.</span><span class="nf">GetValue</span><span class="p">(</span><span class="n">content</span><span class="p">)?.</span><span class="nf">ToString</span><span class="p">())</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="k">value</span> <span class="p">=&gt;</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="k">value</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">bodyParts</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="implementazione-tecnica">Implementazione Tecnica</h2>
+
+<h3 id="definizione-dellinterfaccia-di-ricerca">Definizione dell’Interfaccia di Ricerca</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">ISearchProvider</span>
+<span class="p">{</span>
+    <span class="n">Task</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">SearchResult</span><span class="p">&gt;&gt;</span> <span class="nf">SearchAsync</span><span class="p">(</span><span class="kt">string</span> <span class="n">query</span><span class="p">,</span> <span class="n">SearchOptions</span> <span class="n">options</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="classe-per-i-risultati-della-ricerca">Classe per i Risultati della Ricerca</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SearchResult</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Category</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Title</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Body</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">double</span> <span class="n">Score</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="implementazione-del-provider-per-elasticsearch">Implementazione del Provider per Elasticsearch</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ElasticSearchProvider</span> <span class="p">:</span> <span class="n">ISearchProvider</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ElasticClient</span> <span class="n">_client</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Category</span><span class="p">&gt;</span> <span class="n">_categories</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ElasticSearchProvider</span><span class="p">(</span><span class="n">ElasticClient</span> <span class="n">client</span><span class="p">,</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Category</span><span class="p">&gt;</span> <span class="n">categories</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_client</span> <span class="p">=</span> <span class="n">client</span><span class="p">;</span>
+        <span class="n">_categories</span> <span class="p">=</span> <span class="n">categories</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">SearchResult</span><span class="p">&gt;&gt;</span> <span class="nf">SearchAsync</span><span class="p">(</span><span class="kt">string</span> <span class="n">query</span><span class="p">,</span> <span class="n">SearchOptions</span> <span class="n">options</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_client</span><span class="p">.</span><span class="n">SearchAsync</span><span class="p">&lt;</span><span class="n">SearchResult</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+            <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">query</span><span class="p">)))</span>
+        <span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="p">.</span><span class="n">Documents</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> 
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">category</span> <span class="p">=</span> <span class="n">_categories</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="n">d</span><span class="p">.</span><span class="n">Category</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">SearchResult</span>
+            <span class="p">{</span>
+                <span class="n">Title</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span>
+                <span class="n">Body</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Introduction</span><span class="p">,</span>
+                <span class="n">Url</span> <span class="p">=</span> <span class="n">UrlGenerator</span><span class="p">.</span><span class="nf">GenerateUrl</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">category</span><span class="p">),</span>
+                <span class="n">Score</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">MaxScore</span> <span class="p">??</span> <span class="m">1.0</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="implementazione-del-provider-per-sql-server">Implementazione del Provider per SQL Server</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SqlSearchProvider</span> <span class="p">:</span> <span class="n">ISearchProvider</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">DbContext</span> <span class="n">_context</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Category</span><span class="p">&gt;</span> <span class="n">_categories</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">SqlSearchProvider</span><span class="p">(</span><span class="n">DbContext</span> <span class="n">context</span><span class="p">,</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Category</span><span class="p">&gt;</span> <span class="n">categories</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_context</span> <span class="p">=</span> <span class="n">context</span><span class="p">;</span>
+        <span class="n">_categories</span> <span class="p">=</span> <span class="n">categories</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">SearchResult</span><span class="p">&gt;&gt;</span> <span class="nf">SearchAsync</span><span class="p">(</span><span class="kt">string</span> <span class="n">query</span><span class="p">,</span> <span class="n">SearchOptions</span> <span class="n">options</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_context</span><span class="p">.</span><span class="n">Contents</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">EF</span><span class="p">.</span><span class="n">Functions</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span> <span class="p">||</span> <span class="n">EF</span><span class="p">.</span><span class="n">Functions</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">Body</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">ToListAsync</span><span class="p">();</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">record</span> <span class="k">in</span> <span class="n">results</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">record</span><span class="p">.</span><span class="n">Title</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+                <span class="n">record</span><span class="p">.</span><span class="n">Score</span> <span class="p">+=</span> <span class="m">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">record</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+                <span class="n">record</span><span class="p">.</span><span class="n">Score</span> <span class="p">+=</span> <span class="m">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">results</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">record</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">category</span> <span class="p">=</span> <span class="n">_categories</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="n">record</span><span class="p">.</span><span class="n">Category</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">SearchResult</span>
+            <span class="p">{</span>
+                <span class="n">Title</span> <span class="p">=</span> <span class="n">record</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span>
+                <span class="n">Body</span> <span class="p">=</span> <span class="n">record</span><span class="p">.</span><span class="n">Body</span><span class="p">,</span>
+                <span class="n">Url</span> <span class="p">=</span> <span class="n">UrlGenerator</span><span class="p">.</span><span class="nf">GenerateUrl</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">category</span><span class="p">),</span>
+                <span class="n">Score</span> <span class="p">=</span> <span class="n">record</span><span class="p">.</span><span class="n">Score</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="aggiunta-dei-contenuti-agli-indici">Aggiunta dei Contenuti agli Indici</h2>
+
+<p>Per mantenere gli indici aggiornati, possiamo creare un’interfaccia <code class="language-plaintext highlighter-rouge">IIndexUpdater</code> e implementare classi specifiche per Elasticsearch e SQL Server.</p>
+
+<h3 id="definizione-dellinterfaccia-di-aggiornamento-indici">Definizione dell’Interfaccia di Aggiornamento Indici</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IIndexUpdater</span>
+<span class="p">{</span>
+    <span class="n">Task</span> <span class="n">UpdateIndexAsync</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">entity</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="implementazione-dellaggiornamento-indici-per-elasticsearch">Implementazione dell’Aggiornamento Indici per Elasticsearch</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ElasticIndexUpdater</span> <span class="p">:</span> <span class="n">IIndexUpdater</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ElasticClient</span> <span class="n">_client</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ElasticIndexUpdater</span><span class="p">(</span><span class="n">ElasticClient</span> <span class="n">client</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_client</span> <span class="p">=</span> <span class="n">client</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="n">UpdateIndexAsync</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">entity</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">await</span> <span class="n">_client</span><span class="p">.</span><span class="nf">IndexDocumentAsync</span><span class="p">(</span><span class="n">entity</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="implementazione-dellaggiornamento-indici-per-sql-server">Implementazione dell’Aggiornamento Indici per SQL Server</h3>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SqlIndexUpdater</span> <span class="p">:</span> <span class="n">IIndexUpdater</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">DbContext</span> <span class="n">_context</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">SqlIndexUpdater</span><span class="p">(</span><span class="n">DbContext</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_context</span> <span class="p">=</span> <span class="n">context</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="n">UpdateIndexAsync</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">entity</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_context</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="n">entity</span><span class="p">);</span>
+        <span class="k">await</span> <span class="n">_context</span><span class="p">.</span><span class="nf">SaveChangesAsync</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="utilizzo-dellindex-updater">Utilizzo dell’Index Updater</h3>
+
+<p>Quando un nuovo contenuto viene aggiunto o modificato, possiamo chiamare il metodo <code class="language-plaintext highlighter-rouge">UpdateIndexAsync</code> per aggiornare gli indici.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ContentService</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IIndexUpdater</span> <span class="n">_indexUpdater</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ContentService</span><span class="p">(</span><span class="n">IIndexUpdater</span> <span class="n">indexUpdater</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_indexUpdater</span> <span class="p">=</span> <span class="n">indexUpdater</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="n">AddOrUpdateContentAsync</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">content</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Aggiungi o aggiorna il contenuto nel database</span>
+        <span class="c1">// ...existing code...</span>
+
+        <span class="c1">// Aggiorna l'indice</span>
+        <span class="k">await</span> <span class="n">_indexUpdater</span><span class="p">.</span><span class="nf">UpdateIndexAsync</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="conclusioni">Conclusioni</h2>
+
+<p>Il motore di ricerca supporta sia SQL che Elasticsearch attraverso provider configurabili. Attraverso la gestione dei custom attribute sulle classi e l’uso di una tabella di categorie, è possibile definire quali oggetti sono “contenuti” e il link al dettaglio di tali contenuti. Inoltre, l’aggiornamento degli indici è gestito tramite l’interfaccia <code class="language-plaintext highlighter-rouge">IIndexUpdater</code> e le sue implementazioni specifiche per Elasticsearch e SQL Server.</p>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Luca Saglietti. Fatto con ❤️ e ☕</p>
+        </div>
+    </footer>
+</body>
+</html>
