@@ -1,0 +1,26 @@
+# Site settings
+title: Luca Saglietti - Portfolio & Blog
+description: Sviluppatore .NET e appassionato di tecnologia
+author: Luca Saglietti
+baseurl: ""
+url: "https://sagliettiluca.it"
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Exclude from processing
+exclude:
+  - generate_index.py
+  - README.md
+  - .github/
+
+# Enable default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

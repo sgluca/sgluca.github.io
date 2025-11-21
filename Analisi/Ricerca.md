@@ -1,3 +1,13 @@
+---
+layout: default
+title: "Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core"
+description: "Analisi dettagliata dello sviluppo di un motore di ricerca interno per ASP.NET Core"
+section: "🔍 Analisi"
+section_url: "/Analisi/"
+show_back_button: true
+back_url: "/Analisi/"
+---
+
 # Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core
 
 ## Introduzione
