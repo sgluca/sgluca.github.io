@@ -1,3 +1,13 @@
+---
+layout: default
+title: "Gestione Test del Codice"
+description: "Guida alla gestione e organizzazione dei test del codice"
+section: "🔍 Analisi"
+section_url: "/Analisi/"
+show_back_button: true
+back_url: "/Analisi/"
+---
+
 # Gestione Test del Codice
 In vista della certificazione ISO, è necessario impostare e definire una serie di test da eseguire sul codice per garantirne il corretto funzionamento e il rispetto degli standard di qualità.
 
