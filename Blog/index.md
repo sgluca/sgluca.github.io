@@ -33,6 +33,10 @@ Ecco i documenti disponibili:
     <div class="article-icon">🧹</div>
     <div class="article-title">Pulizia file MD <span class="article-arrow">→</span></div>
   </a>
+  <a href="./7.React-Aggiornamento%20Expo.html" class="article-card">
+    <div class="article-icon">⚛️</div>
+    <div class="article-title">Aggiornare Expo da v52 a v54 in React Native <span class="article-arrow">→</span></div>
+  </a>
   <a href="./AspnetCoreIdentity.html" class="article-card">
     <div class="article-icon">🔐</div>
     <div class="article-title">Asp.NET Core Identity <span class="article-arrow">→</span></div>
