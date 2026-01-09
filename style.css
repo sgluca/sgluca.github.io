@@ -9,7 +9,6 @@
     --primary-color: #FF0000;
     --primary-dark: #CC0000;
     --primary-light: #FF3333;
-    --secondary-color: #0000FF;
     --text-dark: #000000;
     --text-light: #333333;
     --bg-light: #FFFFFF;
@@ -182,7 +181,6 @@ h1, h2, h3, h4, h5, h6 {
 .card-icon {
     font-size: 4rem;
     margin-bottom: 1.5rem;
-    filter: grayscale(100%);
 }
 
 .card-title {
@@ -325,7 +323,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 32px;
     color: inherit;
     flex-shrink: 0;
-    stroke-width: 3;
+    stroke-width: 3px;
 }
 
 .social-link span {
