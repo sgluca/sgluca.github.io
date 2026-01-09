@@ -77,8 +77,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
 }
 
 .hero-decoration {
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-title:hover {
-    animation: glitch 0.3s infinite;
+    animation: glitch 0.3s 3;
 }
 
 @keyframes glitch {
@@ -159,7 +159,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn:hover::before {
     opacity: 1;
-    animation: bounce 0.5s ease-in-out infinite;
+    animation: bounce 0.5s ease-in-out 3;
 }
 
 @keyframes bounce {
