@@ -6,9 +6,9 @@
 }
 
 :root {
-    --primary-color: #FF0000;
-    --primary-dark: #CC0000;
-    --primary-light: #FF3333;
+    --primary-color: #FFD700;
+    --primary-dark: #DAA520;
+    --primary-light: #FFED4E;
     --text-dark: #000000;
     --text-light: #333333;
     --bg-light: #FFFFFF;
@@ -47,9 +47,38 @@ h1, h2, h3, h4, h5, h6 {
 .hero {
     position: relative;
     background: var(--primary-color);
-    color: var(--bg-white);
+    color: var(--text-dark);
     padding: 6rem 0;
     border-bottom: var(--border-width) solid var(--border-color);
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "⚠️";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    animation: rotate 4s linear infinite;
+}
+
+.hero::after {
+    content: "⚡";
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
 }
 
 .hero-decoration {
@@ -77,6 +106,20 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.05em;
     line-height: 0.9;
     text-transform: uppercase;
+    position: relative;
+}
+
+.hero-title:hover {
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
 }
 
 .hero-subtitle {
@@ -104,6 +147,24 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
     font-family: 'Arial Black', 'Arial Bold', sans-serif;
     cursor: pointer;
+    position: relative;
+}
+
+.btn::before {
+    content: "→";
+    position: absolute;
+    right: -30px;
+    opacity: 0;
+}
+
+.btn:hover::before {
+    opacity: 1;
+    animation: bounce 0.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
 }
 
 .btn-primary {
@@ -132,6 +193,21 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4rem 0;
     background: var(--bg-white);
     border-bottom: var(--border-width) solid var(--border-color);
+    position: relative;
+}
+
+.sections::before {
+    content: "★";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .section-title {
@@ -143,6 +219,22 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-dark);
     text-transform: uppercase;
     letter-spacing: -0.02em;
+    position: relative;
+}
+
+.section-title::before {
+    content: "▶";
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--primary-color);
+    margin-top: 1rem;
 }
 
 /* Cards Grid */
@@ -218,6 +310,23 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4rem 0;
     background: var(--bg-white);
     border-bottom: var(--border-width) solid var(--border-color);
+    position: relative;
+}
+
+.about::before {
+    content: "🎯";
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    font-size: 8rem;
+    opacity: 0.1;
+    transform: translateY(-50%);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(-50%); }
+    50% { transform: translateY(calc(-50% - 20px)); }
 }
 
 .about-content {
@@ -266,11 +375,23 @@ h1, h2, h3, h4, h5, h6 {
     transition: none;
     text-transform: uppercase;
     font-family: 'Arial Black', 'Arial Bold', sans-serif;
+    position: relative;
+}
+
+.skill-badge::before {
+    content: "◆";
+    margin-right: 0.5rem;
+    color: var(--primary-color);
 }
 
 .skill-badge:hover {
     background: var(--text-dark);
     color: var(--bg-white);
+    transform: rotate(-2deg);
+}
+
+.skill-badge:hover::before {
+    color: var(--primary-color);
 }
 
 /* Contact Section */
@@ -278,6 +399,22 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4rem 0;
     background: var(--bg-white);
     border-bottom: var(--border-width) solid var(--border-color);
+    position: relative;
+}
+
+.contact::before {
+    content: "📬";
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    font-size: 3rem;
+    animation: swing 2s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+@keyframes swing {
+    0%, 100% { transform: translateX(-50%) rotate(-10deg); }
+    50% { transform: translateX(-50%) rotate(10deg); }
 }
 
 .contact-intro {
