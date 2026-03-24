@@ -37,6 +37,10 @@ Ecco i documenti disponibili:
     <div class="article-icon">⚛️</div>
     <div class="article-title">Aggiornare Expo da v52 a v54 in React Native <span class="article-arrow">→</span></div>
   </a>
+  <a href="./8.FreePBX-PushNotifications.html" class="article-card">
+    <div class="article-icon">📄</div>
+    <div class="article-title">FreePBX: Push Notification Custom per LinPhone <span class="article-arrow">→</span></div>
+  </a>
   <a href="./AspnetCoreIdentity.html" class="article-card">
     <div class="article-icon">🔐</div>
     <div class="article-title">Asp.NET Core Identity <span class="article-arrow">→</span></div>
