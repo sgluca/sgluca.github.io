@@ -1,20 +1,7 @@
 ---
 layout: default
-title: "🔍 Analisi"
-description: "Progetti di ricerca e analisi tecnica"
+title: "Articoli"
+description: "Le analisi sono ora nell'elenco unico degli articoli"
 ---
 
-# 🔍 Analisi
-
-Ecco i documenti disponibili:
-
-<div class="article-list">
-  <a href="./Ricerca.html" class="article-card">
-    <div class="article-icon">🔍</div>
-    <div class="article-title">Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core <span class="article-arrow">→</span></div>
-  </a>
-  <a href="./Test.html" class="article-card">
-    <div class="article-icon">🧪</div>
-    <div class="article-title">Gestione Test del Codice <span class="article-arrow">→</span></div>
-  </a>
-</div>
+<p>Le analisi sono ora raccolte insieme alle guide nella sezione <a href="{{ '/Blog/' | relative_url }}">Articoli</a>.</p>

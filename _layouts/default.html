@@ -7,6 +7,7 @@
     <meta name="author" content="{{ site.author }}">
     <title>{{ page.title | default: site.title }}</title>
     <link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('site-theme')|| (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
     <style>
         /* Additional styles for markdown content */
         .content-wrapper {
@@ -16,8 +17,8 @@
         }
 
         .page-header {
-            background: #FFD700;
-            color: var(--text-dark);
+            background: var(--primary-color);
+            color: #111111;
             padding: 4rem 0;
             margin-bottom: 0;
             position: relative;
@@ -50,15 +51,15 @@
         }
 
         .breadcrumb a {
-            color: var(--text-dark);
+            color: #111111;
             text-decoration: none;
-            border-bottom: 2px solid var(--text-dark);
+            border-bottom: 2px solid #111111;
             transition: none;
         }
 
         .breadcrumb a:hover {
-            background: var(--text-dark);
-            color: var(--bg-white);
+            background: #111111;
+            color: #ffffff;
         }
 
         .breadcrumb span {
@@ -322,6 +323,7 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Cambia tema">🌙 Tema scuro</button>
     <div class="page-header">
         <div class="container">
             <h1 class="page-title">{{ page.title | default: "Luca Saglietti" }}</h1>
@@ -350,8 +352,9 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Luca Saglietti. Fatto con ❤️ e ☕</p>
+            <p>&copy; 2026 Luca Saglietti. Fatto con ❤️ e ☕</p>
         </div>
     </footer>
+    <script src="{{ '/theme.js' | relative_url }}" defer></script>
 </body>
 </html>

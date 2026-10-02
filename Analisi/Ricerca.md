@@ -2,10 +2,10 @@
 layout: default
 title: "Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core"
 description: "Analisi dettagliata dello sviluppo di un motore di ricerca interno per ASP.NET Core"
-section: "🔍 Analisi"
-section_url: "/Analisi/"
+section: "Articoli"
+section_url: "/Blog/"
 show_back_button: true
-back_url: "/Analisi/"
+back_url: "/Blog/"
 ---
 
 # Analisi dello Sviluppo di un Motore di Ricerca Interno in ASP.NET Core
@@ -312,4 +312,3 @@ public class ContentService
 ## Conclusioni
 
 Il motore di ricerca supporta sia SQL che Elasticsearch attraverso provider configurabili. Attraverso la gestione dei custom attribute sulle classi e l'uso di una tabella di categorie, è possibile definire quali oggetti sono "contenuti" e il link al dettaglio di tali contenuti. Inoltre, l'aggiornamento degli indici è gestito tramite l'interfaccia `IIndexUpdater` e le sue implementazioni specifiche per Elasticsearch e SQL Server.
-

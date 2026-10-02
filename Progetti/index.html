@@ -8,9 +8,11 @@
     <meta name="author" content="Luca Saglietti">
     <title>Progetti | Luca Saglietti</title>
     <link rel="stylesheet" href="../style.css">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('site-theme')|| (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
 </head>
 
 <body>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Cambia tema">🌙 Tema scuro</button>
     <header class="projects-hero">
         <div class="container">
             <nav class="projects-nav" aria-label="Navigazione">
@@ -88,6 +90,7 @@
     </main>
 
     <footer class="footer"><div class="container"><p>&copy; 2026 Luca Saglietti</p></div></footer>
+    <script src="../theme.js" defer></script>
 </body>
 
 </html>

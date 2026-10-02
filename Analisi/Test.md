@@ -2,10 +2,10 @@
 layout: default
 title: "Gestione Test del Codice"
 description: "Guida alla gestione e organizzazione dei test del codice"
-section: "🔍 Analisi"
-section_url: "/Analisi/"
+section: "Articoli"
+section_url: "/Blog/"
 show_back_button: true
-back_url: "/Analisi/"
+back_url: "/Blog/"
 ---
 
 # Gestione Test del Codice

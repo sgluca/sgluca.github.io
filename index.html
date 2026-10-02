@@ -8,9 +8,11 @@
     <meta name="author" content="Luca Saglietti">
     <title>Luca Saglietti - Portfolio & Blog</title>
     <link rel="stylesheet" href="style.css">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('site-theme')|| (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
 </head>
 
 <body>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Cambia tema">🌙 Tema scuro</button>
     <!-- Hero Section -->
     <header class="hero">
         <div class="container">
@@ -32,16 +34,10 @@
         <div class="container">
             <h2 class="section-title">Esplora il Sito</h2>
             <div class="cards-grid">
-                <a href="./Analisi/" class="card">
-                    <div class="card-icon">🔍</div>
-                    <h3 class="card-title">Analisi</h3>
-                    <p class="card-description">Progetti di ricerca e analisi tecnica</p>
-                    <span class="card-arrow">→</span>
-                </a>
                 <a href="./Blog/" class="card">
                     <div class="card-icon">✍️</div>
-                    <h3 class="card-title">Blog</h3>
-                    <p class="card-description">Articoli su sviluppo, tecnologie e tutorial</p>
+                    <h3 class="card-title">Articoli</h3>
+                    <p class="card-description">Guide, approfondimenti e analisi sullo sviluppo software</p>
                     <span class="card-arrow">→</span>
                 </a>
                 <a href="./Progetti/" class="card">
@@ -136,9 +132,10 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Luca Saglietti. Fatto con ❤️ e ☕</p>
+            <p>&copy; 2026 Luca Saglietti. Fatto con ❤️ e ☕</p>
         </div>
     </footer>
+    <script src="theme.js" defer></script>
 </body>
 
 </html>
