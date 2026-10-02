@@ -5,6 +5,7 @@ Ecco le pagine disponibili:
 - [Home](./) 🏠
 - [Analisi](./Analisi) 🔍
 - [Blog](./Blog) ✍️
+- [Progetti](./Progetti) ✦
 
 Buona navigazione! 🌍
 
