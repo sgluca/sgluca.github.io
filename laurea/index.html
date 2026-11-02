@@ -3,21 +3,21 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#100e17">
-  <meta name="description" content="BUG FIXED — Un piccolo grazie per aver fatto parte del mio percorso.">
-  <title>BUG FIXED · Luca | Laurea 2026</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+  <meta name="theme-color" content="#10121d">
+  <meta name="description" content="BUG HUNTER: trova i bug, sblocca la dedica e festeggia la laurea di Luca!">
+  <title>BUG HUNTER · Laurea di Luca</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #100e17;
-      --panel: #1a1723;
-      --line: #39313e;
-      --text: #fff4f0;
-      --muted: #b9aab9;
-      --red: #ff526b;
-      --green: #91e6b4;
-      --gold: #f9c97b
+      --bg: #10121d;
+      --panel: #1d2232;
+      --border: #343b51;
+      --text: #f9f5f7;
+      --muted: #a9b3c8;
+      --pink: #ff617c;
+      --mint: #78efba;
+      --gold: #ffd07a
     }
 
     * {
@@ -25,378 +25,421 @@
     }
 
     html {
-      min-height: 100%;
-      background: var(--bg)
+      background: var(--bg);
+      scroll-behavior: smooth
     }
 
     body {
       margin: 0;
       min-height: 100svh;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       color: var(--text);
-      background: radial-gradient(ellipse at 50% -10%, #49212e 0%, transparent 58%), var(--bg);
-      overflow-x: hidden
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(ellipse at top, #30223b 0, transparent 55%), var(--bg)
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit
     }
 
     button {
-      font: inherit;
-      cursor: pointer
+      cursor: pointer;
+      touch-action: manipulation
     }
 
-    button:focus-visible {
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
       outline: 3px solid var(--gold);
-      outline-offset: 4px
+      outline-offset: 3px
     }
 
-    .shell {
-      max-width: 680px;
-      margin: auto;
-      padding: 24px 20px 42px;
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column
+    .wrap {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 18px 16px max(28px, env(safe-area-inset-bottom))
     }
 
     .top {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: .12em
-    }
-
-    .live {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 14px var(--green)
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 34px 0
-    }
-
-    .eyebrow {
-      color: var(--red);
-      font-size: 12px;
-      letter-spacing: .2em;
-      font-weight: 700
-    }
-
-    .hero h1 {
-      font-size: clamp(54px, 13vw, 96px);
-      line-height: .92;
-      letter-spacing: -.095em;
-      margin: 16px 0 22px;
-      font-weight: 900
-    }
-
-    .hero h1 span {
-      color: var(--red)
-    }
-
-    .lead {
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 520px
-    }
-
-    .terminal {
-      background: rgba(26, 23, 35, .94);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      overflow: hidden;
-      margin: 28px 0 22px;
-      box-shadow: 0 18px 70px #0006
-    }
-
-    .terminal-head {
-      display: flex;
-      gap: 7px;
-      align-items: center;
-      padding: 13px 16px;
-      background: #24202b;
-      border-bottom: 1px solid var(--line)
-    }
-
-    .terminal-head i {
-      display: block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #ff6a6a
-    }
-
-    .terminal-head i:nth-child(2) {
-      background: #f7c46d
-    }
-
-    .terminal-head i:nth-child(3) {
-      background: #7edaa5
-    }
-
-    .terminal-head small {
-      margin-left: auto;
-      color: var(--muted);
-      font-size: 11px
-    }
-
-    .terminal-body {
-      min-height: 170px;
-      padding: 22px 18px;
-      line-height: 1.9;
-      font-size: 13px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere
-    }
-
-    .prompt {
-      color: var(--green)
-    }
-
-    .error {
-      color: var(--red)
-    }
-
-    .success {
-      color: var(--green)
-    }
-
-    .action {
-      border: 0;
-      background: var(--red);
-      color: #200e16;
-      padding: 17px 20px;
-      border-radius: 12px;
-      font-weight: 900;
-      width: 100%;
-      box-shadow: 0 8px 30px #ff526b35;
-      transition: transform .15s, filter .15s
-    }
-
-    .action:hover {
-      filter: brightness(1.08);
-      transform: translateY(-2px)
-    }
-
-    .action:disabled {
-      opacity: .5;
-      cursor: wait
-    }
-
-    .note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-      margin-top: 16px
-    }
-
-    .game {
-      display: none
-    }
-
-    .game.active {
-      display: block
-    }
-
-    .game h2,
-    .result h2 {
-      font-size: clamp(28px, 7vw, 43px);
-      line-height: 1.15;
-      letter-spacing: -.05em;
-      margin: 12px 0
-    }
-
-    .game p {
-      color: var(--muted);
-      line-height: 1.6
-    }
-
-    .counter {
-      color: var(--gold);
-      font-size: 12px;
-      margin: 18px 0
-    }
-
-    .bugs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 20px 0 26px
-    }
-
-    .bug {
-      background: #251d2b;
-      border: 1px solid #674050;
-      border-radius: 16px;
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      font-size: clamp(32px, 9vw, 55px);
-      transition: transform .2s, opacity .2s, background .2s;
-      touch-action: manipulation
-    }
-
-    .bug:hover {
-      transform: scale(1.05)
-    }
-
-    .bug.fixed {
-      background: #16291f;
-      border-color: #397653;
-      opacity: .55;
-      transform: scale(.92)
-    }
-
-    .bug.fixed:after {
-      content: '✓';
-      position: absolute;
-      color: var(--green);
-      font-size: 36px
-    }
-
-    .bug {
-      position: relative
-    }
-
-    .result {
-      display: none;
-      text-align: center;
-      animation: appear .7s ease both
-    }
-
-    .result.active {
-      display: block
-    }
-
-    .medal {
-      font-size: 64px;
-      filter: drop-shadow(0 0 28px #ff526b55)
-    }
-
-    .result h2 {
-      font-size: clamp(36px, 9vw, 58px)
-    }
-
-    .result h2 span {
-      color: var(--green)
-    }
-
-    .result .subtitle {
-      color: var(--gold);
-      font-size: 12px;
-      letter-spacing: .12em
-    }
-
-    .thanks {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 18px;
-      line-height: 1.75;
-      margin: 28px auto;
-      max-width: 480px;
-      color: #f0e4e7
-    }
-
-    .signature {
-      color: var(--red);
-      font-size: 17px;
-      font-weight: bold
-    }
-
-    .date {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 9px
-    }
-
-    .replay {
-      margin-top: 24px;
-      background: transparent;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 12px 18px;
+      gap: 10px;
+      font: 700 11px/1.3 ui-monospace, monospace;
+      letter-spacing: .07em;
       color: var(--muted)
     }
 
-    footer {
-      text-align: center;
-      color: #8f8193;
-      font-size: 11px;
-      line-height: 1.6;
-      padding-top: 20px;
-      border-top: 1px solid #2a2431
+    .online {
+      color: var(--mint)
     }
 
+    .panel {
+      border: 1px solid var(--border);
+      background: #1b2030e8;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 14px 40px #0003
+    }
+
+    .eyebrow {
+      font: 700 12px ui-monospace, monospace;
+      letter-spacing: .13em;
+      color: var(--pink)
+    }
+
+    h1 {
+      font-size: clamp(48px, 14vw, 76px);
+      line-height: .91;
+      letter-spacing: -.085em;
+      margin: 18px 0 20px
+    }
+
+    h1 span,
+    .accent {
+      color: var(--pink)
+    }
+
+    h2 {
+      font-size: clamp(27px, 7vw, 36px);
+      line-height: 1.1;
+      letter-spacing: -.04em;
+      margin: 10px 0 14px
+    }
+
+    p {
+      color: var(--muted);
+      margin: 12px 0
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 54px;
+      padding: 13px 16px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--pink);
+      color: #240c17;
+      font-weight: 800
+    }
+
+    .btn.secondary {
+      background: #30374c;
+      color: var(--text);
+      border: 1px solid #4d5772
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 20px 0
+    }
+
+    .stat {
+      padding: 12px 7px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #151a28
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font: 700 10px ui-monospace, monospace;
+      letter-spacing: .07em
+    }
+
+    .stat strong {
+      font-size: 21px;
+      font-variant-numeric: tabular-nums
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin: 16px 0
+    }
+
+    .level {
+      padding: 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      text-align: center;
+      font-weight: 800;
+      color: var(--muted);
+      background: #171d2a
+    }
+
+    .level.done {
+      color: #082318;
+      background: var(--mint);
+      border-color: var(--mint)
+    }
+
+    .level.current {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    .lock {
+      padding: 13px 14px;
+      background: #141a29;
+      border: 1px dashed #56617b;
+      border-radius: 12px;
+      margin: 16px 0;
+      color: var(--gold);
+      font-weight: 700
+    }
+
+    .lock.unlocked {
+      color: var(--mint);
+      border-color: #2d7556
+    }
+
+    [hidden],
     .hidden {
       display: none !important
     }
 
-    #confetti {
-      position: fixed;
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      font: 700 12px ui-monospace, monospace;
+      color: var(--muted)
+    }
+
+    .hud strong {
+      display: block;
+      color: var(--text);
+      font-size: 22px
+    }
+
+    .bar {
+      height: 8px;
+      background: #3b4155;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 12px 0
+    }
+
+    .bar>div {
+      height: 100%;
+      width: 100%;
+      background: var(--mint);
+      transition: width .12s linear
+    }
+
+    .arena {
+      position: relative;
+      width: 100%;
+      height: clamp(330px, 53svh, 510px);
+      overflow: hidden;
+      border: 1px solid #46506c;
+      border-radius: 16px;
+      background: radial-gradient(circle at 50% 35%, #28334b, #131a29 78%);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      isolation: isolate
+    }
+
+    .arena:before {
+      content: "";
+      position: absolute;
       inset: 0;
       pointer-events: none;
-      z-index: 10;
-      overflow: hidden
+      background-image: linear-gradient(#ffffff09 1px, transparent 1px), linear-gradient(90deg, #ffffff09 1px, transparent 1px);
+      background-size: 32px 32px
     }
 
-    .piece {
+    .bug {
       position: absolute;
-      top: -20px;
-      width: 9px;
-      height: 15px;
-      opacity: .9;
-      animation: fall var(--duration) linear forwards;
-      left: var(--left);
-      background: var(--color);
-      transform: rotate(var(--rotate))
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      padding: 0;
+      border: 2px solid #ffffff44;
+      border-radius: 50%;
+      background: #ec5b72cc;
+      font-size: 29px;
+      line-height: 1;
+      box-shadow: 0 0 0 8px #ff617c18, 0 7px 22px #0005;
+      will-change: transform;
+      touch-action: manipulation;
+      z-index: 2
     }
 
-    @keyframes fall {
+    .bug.fast {
+      background: #d9982b
+    }
+
+    .bug.tank {
+      background: #8157c5
+    }
+
+    .bug.trap {
+      background: #4b556b;
+      border-style: dashed;
+      box-shadow: 0 0 0 8px #a6b0c014
+    }
+
+    .bug.boss {
+      width: 82px;
+      height: 82px;
+      font-size: 43px;
+      background: #ad396a;
+      box-shadow: 0 0 0 12px #ff617c22, 0 0 32px #ff617c44
+    }
+
+    .bug:active {
+      filter: brightness(1.3)
+    }
+
+    .floating {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--mint);
+      animation: float .6s ease-out forwards
+    }
+
+    @keyframes float {
       to {
-        transform: translate(var(--drift), 110vh) rotate(850deg);
+        transform: translateY(-38px);
         opacity: 0
       }
     }
 
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translateY(16px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      background: #111625ed;
+      backdrop-filter: blur(5px)
     }
 
-    @media(min-width:650px) {
-      .shell {
-        padding: 32px 30px 38px
-      }
+    .overlay h3 {
+      font-size: 29px;
+      margin: 8px 0
+    }
 
-      .bugs {
-        gap: 20px
-      }
+    .overlay p {
+      max-width: 270px
+    }
 
-      .terminal-body {
-        padding: 26px
-      }
+    .overlay .btn {
+      max-width: 270px
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 12px;
+      margin: 12px 0 0
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px
+    }
+
+    .actions .btn {
+      min-height: 46px;
+      font-size: 13px
+    }
+
+    .field {
+      display: block;
+      margin: 18px 0 7px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #56617a;
+      border-radius: 10px;
+      background: #111725;
+      color: var(--text);
+      padding: 13px;
+      resize: vertical
+    }
+
+    textarea {
+      min-height: 130px
+    }
+
+    .status {
+      min-height: 26px;
+      font-size: 13px
+    }
+
+    .success {
+      color: var(--mint)
+    }
+
+    .error {
+      color: #ff9cae
+    }
+
+    .honeypot {
+      position: absolute;
+      left: -10000px
+    }
+
+    .foot {
+      text-align: center;
+      color: #78849d;
+      font: 11px ui-monospace, monospace;
+      margin: 26px 0 0
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 99px;
+      background: #25394a;
+      color: var(--mint);
+      font: 700 11px ui-monospace, monospace
+    }
+
+    .thanks {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text)
     }
 
     @media(prefers-reduced-motion:reduce) {
@@ -409,182 +452,272 @@
       }
     }
 
-    /* Guestbook */
-    .guestbook {
-      margin: 34px 0 18px;
-      text-align: left;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      padding: 22px;
-      border-radius: 16px
+    @media(max-width:360px) {
+      .wrap {
+        padding-inline: 11px
+      }
+
+      .panel {
+        padding: 15px
+      }
+
+      .bug {
+        width: 51px;
+        height: 51px
+      }
     }
 
-    .guestbook h3 {
-      margin: 0 0 10px;
-      font-size: 22px
+    /* Cornice ispirata alle finestre macOS. */
+    .panel {
+      box-shadow: 0 24px 65px #0005, inset 0 1px 0 #ffffff0c
     }
 
-    .guestbook p {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 13px
+    .windowbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: -20px -20px 20px;
+      padding: 13px 16px;
+      min-height: 44px;
+      border-bottom: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      background: linear-gradient(#343949, #272c3b);
+      box-shadow: inset 0 1px 0 #ffffff12
     }
 
-    .guestbook label {
+    .traffic {
+      display: flex;
+      gap: 7px;
+      flex-shrink: 0
+    }
+
+    .traffic i {
       display: block;
-      margin: 15px 0 7px;
-      font-size: 12px;
-      color: var(--gold)
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px #0002;
+      background: #ff5f57
     }
 
-    .guestbook input,
-    .guestbook textarea {
-      display: block;
-      width: 100%;
-      border: 1px solid #655262;
-      border-radius: 9px;
-      background: #100e17;
-      color: var(--text);
-      font: inherit;
-      padding: 13px;
-      resize: vertical
+    .traffic i:nth-child(2) {
+      background: #febc2e
     }
 
-    .guestbook textarea {
-      min-height: 110px
+    .traffic i:nth-child(3) {
+      background: #28c840
     }
 
-    .guestbook .action {
-      margin-top: 18px
+    .windowtitle {
+      flex: 1;
+      min-width: 0;
+      padding-right: 47px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+      color: #c6cbd6;
+      font: 11px ui-monospace, monospace;
+      letter-spacing: .01em
     }
 
-    .guestbook .status {
-      min-height: 24px;
-      font-size: 12px;
-      margin-top: 12px
+    .bug.boss[data-phase="2"] {
+      background: #c14350;
+      box-shadow: 0 0 0 10px #ff617c22, 0 0 30px #ff617c55
     }
 
-    .guestbook .hp {
-      position: absolute;
-      left: -9999px
+    .bug.boss[data-phase="3"] {
+      background: #e55732;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 10px #ff853522, 0 0 36px #ff853555
+    }
+
+    @media(max-width:360px) {
+      .windowbar {
+        margin: -15px -15px 18px;
+        padding-inline: 12px
+      }
+
+      .windowtitle {
+        font-size: 10px
+      }
+    }
+
+    .api-health {
+      flex-shrink: 0;
+      max-width: 48%;
+      text-align: right
+    }
+
+    .api-health.checking {
+      color: var(--muted)
+    }
+
+    .api-health.online {
+      color: var(--mint)
+    }
+
+    .api-health.offline {
+      color: #ff9cae
     }
   </style>
 </head>
 
 <body>
-  <div id="confetti" aria-hidden="true"></div>
-  <div class="shell">
-    <header class="top"><span>LUCA.DEV <span style="color:var(--red)">//</span> CLASS OF 2026</span><span
-        class="live"><i class="dot"></i> SYSTEM ONLINE</span></header>
-    <main>
-      <section id="intro">
-        <div class="hero">
-          <div class="eyebrow">// GRADUATION RELEASE v1.0</div>
-          <h1>BUG<br><span>FIXED.</span></h1>
-          <p class="lead">Hai trovato un bug nel mio regalo di laurea. Prima di aprire il messaggio segreto, serve una
-            piccola operazione di debugging.</p>
+  <div class="wrap">
+    <header class="top"><span>LUCA.DEV // CLASS OF 2026</span><span id="apiHealth" class="api-health checking"
+        role="status" aria-live="polite" title="Verifica disponibilità del servizio dediche">● VERIFICA API…</span>
+    </header>
+    <section id="home" class="screen panel">
+      <div class="windowbar"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><span
+          class="windowtitle">bug-hunter — graduation.exe</span></div>
+      <div class="eyebrow">// GRADUATION RELEASE v2.0</div>
+      <h1>BUG<br><span>HUNTER.</span></h1>
+      <p>La laurea è stata compilata con successo. Ma qualcuno ha lasciato dei bug in produzione… e ora tocca a te! 🐞
+      </p>
+      <div class="stats">
+        <div class="stat"><span>RECORD</span><strong id="homeBest">0</strong></div>
+        <div class="stat"><span>LIVELLO MAX</span><strong id="homeLevel">0</strong></div>
+        <div class="stat"><span>MISSIONE</span><strong>3/5</strong></div>
+      </div>
+      <div id="homeLock" class="lock">🔒 Completa il livello 3 per sbloccare la dedica.</div>
+      <button class="btn" id="playBtn">▶ AVVIA DEBUGGING</button>
+      <button class="btn secondary hidden" id="homeWishBtn" style="margin-top:10px">✉ SCRIVI LA DEDICA</button>
+      <p class="small">Solo un dito, nessuna registrazione. I tuoi progressi restano salvati su questo telefono.</p>
+    </section>
+    <section id="game" class="screen panel" hidden>
+      <div class="windowbar"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><span
+          class="windowtitle">debugger — live session</span></div>
+      <div class="eyebrow" id="levelName">// LEVEL 1</div>
+      <h2 id="gameTitle">Hello World</h2>
+      <div class="hud">
+        <div>SCORE<strong id="score">0</strong></div>
+        <div>FIXED<strong id="fixed">0/6</strong></div>
+        <div>TIME<strong id="time">30s</strong></div>
+      </div>
+      <div class="bar">
+        <div id="timeBar"></div>
+      </div>
+      <div class="arena" id="arena" aria-label="Area di gioco: tocca gli insetti, evita i falsi bug">
+        <div class="overlay" id="overlay" hidden>
+          <div class="eyebrow" id="overlayLabel">// SYSTEM</div>
+          <h3 id="overlayTitle">Pronto?</h3>
+          <p id="overlayText"></p><button class="btn" id="overlayBtn">CONTINUA →</button>
         </div>
-        <div class="terminal" aria-label="Console di avvio">
-          <div class="terminal-head"><i></i><i></i><i></i><small>graduation.exe</small></div>
-          <div class="terminal-body"><span class="prompt">$</span> ./graduation.exe
-            <span class="success">✓</span> Compilazione completata
-            <span class="success">✓</span> Esami superati
-            <span class="success">✓</span> Tesi consegnata
-            <span class="error">!</span> Rilevati 6 bug nell'ultimo rilascio
-            <span class="prompt">&gt;</span> Intervento richiesto_
-          </div>
-        </div><button id="start" class="action">AVVIA DEBUGGING →</button>
-        <p class="note">Nessuna installazione richiesta. Solo qualche bug da sistemare.</p>
-      </section>
-      <section id="game" class="game" aria-labelledby="game-title">
-        <div class="eyebrow">// DEBUG MODE ENABLED</div>
-        <h2 id="game-title">Trova e risolvi<br>tutti i bug 🐞</h2>
-        <p>Tocca ogni insetto per correggere gli errori. Ne mancano soltanto sei, promesso.</p>
-        <div id="counter" class="counter" aria-live="polite">BUG RISOLTI: 0 / 6</div>
-        <div id="bugs" class="bugs"></div>
-        <div class="terminal">
-          <div class="terminal-head"><i></i><i></i><i></i><small>debug.log</small></div>
-          <div id="log" class="terminal-body" aria-live="polite"><span class="prompt">$</span> waiting for debugger...
-          </div>
-        </div>
-      </section>
-      <section id="result" class="result" aria-labelledby="result-title">
-        <div class="medal" aria-hidden="true">🎓</div>
-        <div class="eyebrow">// BUILD SUCCESSFUL</div>
-        <h2 id="result-title">ALL BUGS<br><span>FIXED!</span></h2>
-        <div class="subtitle">ACHIEVEMENT UNLOCKED · LAUREA IN INFORMATICA</div>
-        <div class="terminal" style="text-align:left">
-          <div class="terminal-head"><i></i><i></i><i></i><small>release-notes.txt</small></div>
-          <div class="terminal-body"><span class="prompt">$</span> git status
-            <span class="success">✓</span> Laurea completata
-            <span class="success">✓</span> Versione 1.0 rilasciata
-            <span class="success">✓</span> 0 bug rimanenti*
-
-            <span style="color:var(--muted)">* Per una volta, lasciami credere che sia vero.</span>
-          </div>
-        </div>
-        <p class="thanks">Dietro ogni traguardo ci sono persone che rendono il percorso più bello.<br><br><strong>Grazie
-            per aver fatto parte del mio.</strong><br><br>E se trovi ancora qualche bug… almeno quelli nel vasetto puoi
-          mangiarli! 🐛</p>
-        <div class="signature">— Luca</div>
-        <div class="date">Laurea in Informatica · 6 novembre 2026</div>
-        <div class="guestbook" id="guestbook">
-          <div class="eyebrow">// PRINT YOUR WISH</div>
-          <h3>Lasciami una dedica 🖨️</h3>
-          <p>Scrivi un messaggio: arriverà sulla mia stampante termica e diventerà un ricordo cartaceo della laurea!</p>
-          <form id="wishForm"><label for="wishName">Il tuo nome</label><input id="wishName" name="name" maxlength="40"
-              minlength="2" autocomplete="name" required placeholder="Come ti chiami?"><label for="wishText">Il tuo
-              messaggio (max 250 caratteri)</label><textarea id="wishText" name="message" maxlength="250" minlength="3"
-              required placeholder="Scrivi un augurio, una dedica o una battuta..."></textarea>
-            <div class="hp" aria-hidden="true"><label for="website">Lascia vuoto</label><input id="website"
-                name="website" tabindex="-1" autocomplete="off"></div><button id="sendWish" class="action"
-              type="submit">INVIA ALLA STAMPANTE →</button>
-            <p class="status" id="wishStatus" role="status" aria-live="polite"></p>
-            <p>Il messaggio verrà conservato per il ricordo della laurea. Evita dati personali o sensibili.</p>
-          </form>
-        </div><button id="replay" class="replay">↻ Rigioca</button>
-      </section>
-    </main>
-    <footer><a href="https://sagliettiluca.it" target="_blank" rel="noopener noreferrer">MADE WITH ❤️, CAFFEINE &amp; A
-        FEW BUGS<br>© 2026 · SGLuca</a></footer>
+      </div>
+      <p class="hint" id="gameHint">Tocca i bug per eliminarli.</p>
+      <div class="actions"><button class="btn secondary" id="exitBtn">← MENU</button><button
+          class="btn secondary hidden" id="gameWishBtn">✉ DEDICA</button></div>
+    </section>
+    <section id="wish" class="screen panel" hidden>
+      <div class="windowbar"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><span
+          class="windowtitle">guestbook — dedica.txt</span></div>
+      <div class="tag">✓ ACHIEVEMENT UNLOCKED</div>
+      <h2>Dedica sbloccata! 🖨️</h2>
+      <p class="thanks">Dietro ogni traguardo ci sono persone che rendono il percorso più bello. <strong>Grazie per aver
+          fatto parte del mio.</strong></p>
+      <p>E se trovi ancora qualche bug… almeno quelli nel vasetto puoi mangiarli! 🐛</p>
+      <p>Lasciami un messaggio: arriverà sulla mia stampante termica e diventerà un ricordo della laurea.</p>
+      <form id="wishForm">
+        <label class="field" for="wishName">Il tuo nome</label><input id="wishName" name="name" minlength="2"
+          maxlength="40" autocomplete="name" required placeholder="Come ti chiami?">
+        <label class="field" for="wishText">La tua dedica (max 250 caratteri)</label><textarea id="wishText"
+          name="message" minlength="3" maxlength="250" required
+          placeholder="Un augurio, una battuta, un ricordo..."></textarea>
+        <div class="honeypot" aria-hidden="true"><label for="website">Non compilare</label><input id="website"
+            name="website" tabindex="-1" autocomplete="off"></div>
+        <button class="btn" id="sendWish" type="submit">🖨 INVIA ALLA STAMPANTE</button>
+        <p class="status" id="wishStatus" role="status" aria-live="polite"></p>
+      </form>
+      <button class="btn secondary" id="wishBack">← TORNA AL GIOCO</button>
+      <p class="small">La dedica viene conservata per ricordare questa giornata. Evita dati personali sensibili.</p>
+    </section>
+    <footer class="foot">MADE WITH ❤️, CAFFEINE &amp; A FEW BUGS<br>LUCA · LAUREA IN INFORMATICA · 6 NOVEMBRE 2026
+    </footer>
   </div>
   <script>
-    (() => { 'use strict'; const intro = document.getElementById('intro'), game = document.getElementById('game'), result = document.getElementById('result'), grid = document.getElementById('bugs'), counter = document.getElementById('counter'), log = document.getElementById('log'), confetti = document.getElementById('confetti'); let fixed = 0, finished = false; const messages = ['NullPointerException: eliminata', 'Segmentation fault: risolto', 'Infinite loop: interrotto', 'Merge conflict: sistemato', 'Off-by-one error: corretto', 'Ultimo bug: risolto!']; function init() { fixed = 0; finished = false; grid.replaceChildren(); counter.textContent = 'BUG RISOLTI: 0 / 6'; log.textContent = '$ waiting for debugger...'; for (let i = 0; i < 6; i++) { const b = document.createElement('button'); b.type = 'button'; b.className = 'bug'; b.textContent = ['🐞', '🪲', '🐛', '🕷️', '🐞', '🐜'][i]; b.setAttribute('aria-label', `Correggi bug ${i + 1}`); b.addEventListener('click', () => { if (b.disabled) return; b.disabled = true; b.classList.add('fixed'); fixed++; counter.textContent = `BUG RISOLTI: ${fixed} / 6`; log.textContent = `$ fix --bug ${i + 1}\n✓ ${messages[i]}\n> ${6 - fixed} bug rimanenti`; if (fixed === 6 && !finished) { finished = true; setTimeout(showResult, 650) } }); grid.append(b) } } function showResult() { game.classList.remove('active'); result.classList.add('active'); launchConfetti(); window.scrollTo({ top: 0, behavior: 'smooth' }) } function launchConfetti() { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; confetti.replaceChildren(); const colors = ['#ff526b', '#f9c97b', '#91e6b4', '#ffffff']; for (let i = 0; i < 85; i++) { const el = document.createElement('span'); el.className = 'piece'; el.style.setProperty('--left', Math.random() * 100 + '%'); el.style.setProperty('--color', colors[i % colors.length]); el.style.setProperty('--duration', (2.7 + Math.random() * 2.5) + 's'); el.style.setProperty('--drift', (Math.random() * 220 - 110) + 'px'); el.style.setProperty('--rotate', (Math.random() * 360) + 'deg'); el.style.animationDelay = (Math.random() * .65) + 's'; confetti.append(el) } setTimeout(() => confetti.replaceChildren(), 6200) } document.getElementById('start').addEventListener('click', () => { intro.classList.add('hidden'); game.classList.add('active'); init(); window.scrollTo({ top: 0, behavior: 'smooth' }) }); document.getElementById('replay').addEventListener('click', () => { result.classList.remove('active'); intro.classList.remove('hidden'); confetti.replaceChildren(); window.scrollTo({ top: 0, behavior: 'smooth' }) }) })();
-  </script>
-
-  <script>
-    // Sostituisci con l'URL HTTPS pubblico della tua API (senza slash finale).
-    const GUESTBOOK_API = 'https://api.sagliettiluca.it';
-    const wishForm = document.getElementById('wishForm');
-    const wishStatus = document.getElementById('wishStatus');
-    const sendWish = document.getElementById('sendWish');
-    wishForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!wishForm.reportValidity()) return;
-      sendWish.disabled = true;
-      wishStatus.textContent = 'Invio in corso...';
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 12000);
-        let response;
+    (() => {
+      'use strict';
+      // CONFIGURAZIONE: modifica solo questo indirizzo con l'URL HTTPS della tua API.
+      const GUESTBOOK_API = 'https://api.sagliettiluca.it';
+      const STORE_KEY = 'luca-bughunter-v2';
+      const LEVELS = [
+        { name: 'Hello World', goal: 6, time: 32, max: 2, speed: 0, trap: 0, interval: 1050 },
+        { name: 'Syntax Error', goal: 8, time: 36, max: 3, speed: 28, trap: 0, interval: 900 },
+        { name: 'Memory Leak', goal: 10, time: 42, max: 4, speed: 40, trap: .22, interval: 800 },
+        { name: 'Race Condition', goal: 12, time: 43, max: 4, speed: 67, trap: .3, interval: 680 },
+        { name: 'Final Debug', goal: 1, time: 32, max: 1, speed: 96, trap: 0, interval: 1000, boss: true, hp: 30 }
+      ];
+      const $ = id => document.getElementById(id);
+      // Health del servizio dediche: non indica lo stato fisico della stampante.
+      const HEALTH_INTERVAL = 5 * 60 * 1000;
+      let healthController = null, lastHealthCheck = 0;
+      function setApiHealth(online) { const badge = $('apiHealth'); badge.className = 'api-health ' + (online ? 'online' : 'offline'); badge.textContent = online ? '● SYSTEM ONLINE' : '● SYSTEM OFFLINE'; badge.title = online ? 'API dediche disponibile' : 'API dediche non raggiungibile o non disponibile'; }
+      async function checkApiHealth() {
+        if (healthController || document.hidden) return;
+        lastHealthCheck = Date.now();
+        if (!navigator.onLine) { setApiHealth(false); return; }
+        const controller = new AbortController(); healthController = controller;
+        const timeout = setTimeout(() => controller.abort(), 5000);
         try {
-          response = await fetch(`${GUESTBOOK_API}/api/messages`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: wishForm.elements.name.value, message: wishForm.elements.message.value, website: wishForm.elements.website.value }),
-            signal: controller.signal
-          });
-        } finally { clearTimeout(timer); }
-        if (!response.ok) throw new Error('Server non disponibile (' + response.status + ')');
-        wishStatus.textContent = '✓ Messaggio ricevuto! È in coda per la stampa. Grazie ❤️';
-        wishForm.reset();
-        sendWish.textContent = 'MESSAGGIO INVIATO ✓';
-        sendWish.disabled = true;
-      } catch (err) {
-        wishStatus.textContent = 'Invio non confermato. Verifica la connessione prima di riprovare, per evitare duplicati.';
-        sendWish.disabled = false;
+          const response = await fetch(`${GUESTBOOK_API}/api/health`, { cache: 'no-store', signal: controller.signal });
+          if (!response.ok) throw new Error('Health HTTP ' + response.status);
+          const body = await response.json();
+          if (healthController === controller) setApiHealth(body?.status === 'online');
+        } catch { if (healthController === controller) setApiHealth(false); }
+        finally { clearTimeout(timeout); if (healthController === controller) healthController = null; }
       }
-    });
+      function refreshApiHealth() { if (Date.now() - lastHealthCheck >= HEALTH_INTERVAL) checkApiHealth(); }
+      setInterval(refreshApiHealth, HEALTH_INTERVAL);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshApiHealth(); });
+      window.addEventListener('online', checkApiHealth);
+      window.addEventListener('offline', () => { healthController?.abort(); healthController = null; setApiHealth(false); });
+
+      const defaults = { bestScore: 0, highestLevel: 0, messageUnlocked: false, messageSent: false };
+      let saved = { ...defaults }; try { const x = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); if (x && typeof x === 'object') saved = { ...defaults, ...x }; } catch { }
+      // Compatibilità con eventuali progressi validi già presenti.
+      saved.bestScore = Math.max(0, Number(saved.bestScore) || 0); saved.highestLevel = Math.min(5, Math.max(0, Number(saved.highestLevel) || 0)); saved.messageUnlocked = !!saved.messageUnlocked || saved.highestLevel >= 3; saved.messageSent = !!saved.messageSent;
+      function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch { } }
+      function show(id) { ['home', 'game', 'wish'].forEach(s => $(s).hidden = s !== id); window.scrollTo({ top: 0, behavior: 'instant' }); if (id === 'home') updateHome(); }
+      function updateHome() { $('homeBest').textContent = Math.floor(saved.bestScore).toLocaleString('it-IT'); $('homeLevel').textContent = saved.highestLevel; $('homeLock').textContent = saved.messageUnlocked ? '🔓 Dedica sbloccata! Puoi scrivere quando vuoi.' : '🔒 Completa il livello 3 per sbloccare la dedica.'; $('homeLock').classList.toggle('unlocked', saved.messageUnlocked); $('homeWishBtn').classList.toggle('hidden', !saved.messageUnlocked); $('gameWishBtn').classList.toggle('hidden', !saved.messageUnlocked); }
+      let state = null, raf = 0, uid = 0, spawner = 0, lastFrame = 0, wishReturn = null;
+      const rand = (a, b) => a + Math.random() * (b - a);
+      function stop() { cancelAnimationFrame(raf); clearInterval(spawner); raf = 0; spawner = 0; lastFrame = 0; }
+      function levelStart(n) { stop(); const cfg = LEVELS[n - 1]; state = { level: n, score: state?.score || 0, fixed: 0, combo: 0, remaining: cfg.time, playing: false, bugs: new Map(), bossHits: 0, spawnedBoss: false }; $('levelName').textContent = `// LEVEL ${n} / 5`; $('gameTitle').textContent = cfg.name; $('gameHint').textContent = cfg.boss ? `BOSS FINALE: ${cfg.hp} colpi, 3 fasi. Dopo pochi colpi cambia posizione!` : n >= 3 ? 'Elimina i bug colorati. Evita i falsi bug grigi!' : 'Tocca i bug per correggere gli errori.'; $('arena').querySelectorAll('.bug,.floating').forEach(e => e.remove()); $('overlay').hidden = false; $('overlayLabel').textContent = `// LEVEL ${n}`; $('overlayTitle').textContent = cfg.name; $('overlayText').textContent = cfg.boss ? `${cfg.hp} punti vita in ${cfg.time} secondi. Si sposta dopo pochi colpi e accelera a ogni fase: inseguilo!` : `Correggi ${cfg.goal} bug prima che scada il tempo.`; $('overlayBtn').textContent = 'INIZIA LIVELLO →'; $('overlayBtn').onclick = beginLevel; renderHud(); show('game'); }
+      function beginLevel() { if (!state || state.playing) return; $('overlay').hidden = true; state.playing = true; lastFrame = 0; if (!state.bugs.size) spawn(); const cfg = LEVELS[state.level - 1]; if (!cfg.boss) spawner = setInterval(() => { if (state?.playing && state.bugs.size < cfg.max) spawn(); }, cfg.interval); raf = requestAnimationFrame(tick); }
+      function spawn() {
+        if (!state?.playing) return; const cfg = LEVELS[state.level - 1]; if (cfg.boss && state.spawnedBoss) return; const arena = $('arena'), w = arena.clientWidth, h = arena.clientHeight, boss = !!cfg.boss, size = boss ? 82 : (window.matchMedia('(max-width:360px)').matches ? 51 : 58), x = rand(8, Math.max(9, w - size - 8)), y = rand(15, Math.max(16, h - size - 15)), trap = !boss && Math.random() < cfg.trap && [...state.bugs.values()].some(b => !b.trap) && [...state.bugs.values()].filter(b => b.trap).length < 2, fast = !boss && state.level > 1 && Math.random() < .35, tank = !boss && state.level >= 3 && Math.random() < .24 && !trap, emoji = boss ? '👾' : trap ? '💣' : tank ? '🪲' : fast ? '🐛' : ['🐞', '🐜', '🕷️', '🐛'][Math.floor(Math.random() * 4)], el = document.createElement('button'), id = ++uid;
+        el.type = 'button'; el.className = 'bug' + (boss ? ' boss' : '') + (trap ? ' trap' : '') + (fast ? ' fast' : '') + (tank ? ' tank' : ''); el.textContent = emoji; el.setAttribute('aria-label', boss ? 'Colpisci il boss' : trap ? 'Falso bug, non toccare' : 'Elimina il bug'); const speed = boss ? cfg.speed : cfg.speed * (fast ? 1.55 : tank ? .7 : 1) * rand(.65, 1.25); const b = { id, el, x, y, size, vx: rand(-1, 1) * speed, vy: rand(-1, 1) * speed, hp: boss ? cfg.hp : tank ? 2 : 1, trap }; if (Math.abs(b.vx) < 8 && speed > 0) b.vx = speed * .7; if (Math.abs(b.vy) < 8 && speed > 0) b.vy = -speed * .5; if (boss) { const angle = rand(0, Math.PI * 2); b.vx = Math.cos(angle) * speed; b.vy = Math.sin(angle) * speed; el.dataset.phase = '1'; } state.bugs.set(id, b); el.style.transform = `translate3d(${x}px,${y}px,0)`; el.addEventListener('click', e => { e.preventDefault(); hit(id); }); arena.append(el); if (boss) state.spawnedBoss = true;
+      }
+      function floatText(x, y, txt, bad = false) { const e = document.createElement('div'); e.className = 'floating'; e.style.left = x + 'px'; e.style.top = y + 'px'; e.style.color = bad ? '#ff9cae' : '#78efba'; e.textContent = txt; $('arena').append(e); setTimeout(() => e.remove(), 620); }
+      function hit(id) {
+        if (!state?.playing) return; const b = state.bugs.get(id); if (!b) return; if (b.trap) { state.combo = 0; state.score = Math.max(0, state.score - 75); state.remaining = Math.max(0, state.remaining - 3); floatText(b.x, b.y, '-75 / -3s', true); removeBug(id); renderHud(); return; }
+        b.hp--; if (LEVELS[state.level - 1].boss) { state.bossHits++; if (b.hp > 0) { const phase = Math.min(2, Math.floor(state.bossHits / 10)); const stride = phase === 2 ? 2 : 3; if (state.bossHits % stride === 0 || state.bossHits % 10 === 0) bossEvade(b, phase); } } state.score += 25 + Math.min(10, state.combo) * 5; floatText(b.x, b.y, b.hp ? '-1 HP' : `+${25 + Math.min(10, state.combo) * 5}`); if (b.hp > 0) { b.el.style.filter = 'brightness(1.8)'; setTimeout(() => { if (b.el.isConnected) b.el.style.filter = ''; }, 90); renderHud(); return; } state.combo++; state.fixed++; state.score += 50; removeBug(id); if (state.fixed >= LEVELS[state.level - 1].goal) { finishLevel(); return; } if (state.bugs.size && [...state.bugs.values()].every(b => b.trap)) spawn(); renderHud();
+      }
+      function bossEvade(b, phase) {
+        const arena = $('arena'), maxX = Math.max(8, arena.clientWidth - b.size - 8), maxY = Math.max(8, arena.clientHeight - b.size - 8);
+        // Salta nel lato opposto: i tocchi ripetuti nello stesso punto non bastano.
+        b.x = b.x < maxX / 2 ? rand(maxX * .65, maxX) : rand(8, Math.max(9, maxX * .35));
+        b.y = b.y < maxY / 2 ? rand(maxY * .6, maxY) : rand(8, Math.max(9, maxY * .4));
+        const speed = LEVELS[state.level - 1].speed * (1 + phase * .4), angle = rand(0, Math.PI * 2);
+        b.vx = Math.cos(angle) * speed; b.vy = Math.sin(angle) * speed; b.el.dataset.phase = String(phase + 1);
+        b.el.style.transform = `translate3d(${b.x}px,${b.y}px,0)`;
+        $('gameHint').textContent = `BOSS · FASE ${phase + 1}/3 · ${b.hp} HP rimasti${phase === 2 ? ' · ULTIMO SPRINT!' : ''}`;
+      }
+      function removeBug(id) { const b = state?.bugs.get(id); if (b) { b.el.remove(); state.bugs.delete(id); } }
+      function renderHud() { if (!state) return; const cfg = LEVELS[state.level - 1]; $('score').textContent = Math.floor(state.score).toLocaleString('it-IT'); $('fixed').textContent = cfg.boss ? `${state.bossHits}/${cfg.hp}` : `${state.fixed}/${cfg.goal}`; $('time').textContent = Math.ceil(state.remaining) + 's'; $('timeBar').style.width = Math.max(0, state.remaining / cfg.time * 100) + '%'; $('timeBar').style.background = state.remaining < 10 ? 'var(--pink)' : 'var(--mint)'; }
+      function tick(now) { if (!state?.playing) return; if (!lastFrame) lastFrame = now; const dt = Math.min(.05, (now - lastFrame) / 1000); lastFrame = now; state.remaining -= dt; const w = $('arena').clientWidth, h = $('arena').clientHeight; for (const b of state.bugs.values()) { b.x += b.vx * dt; b.y += b.vy * dt; if (b.x < 4) { b.x = 4; b.vx = Math.abs(b.vx); } if (b.y < 4) { b.y = 4; b.vy = Math.abs(b.vy); } if (b.x > w - b.size - 4) { b.x = Math.max(4, w - b.size - 4); b.vx = -Math.abs(b.vx); } if (b.y > h - b.size - 4) { b.y = Math.max(4, h - b.size - 4); b.vy = -Math.abs(b.vy); } b.el.style.transform = `translate3d(${b.x}px,${b.y}px,0)`; } renderHud(); if (state.remaining <= 0) { loseLevel(); return; } raf = requestAnimationFrame(tick); }
+      function finishLevel() {
+        if (!state) return; stop(); state.playing = false; renderHud(); const done = state.level; state.score += Math.ceil(state.remaining) * 10; saved.bestScore = Math.max(saved.bestScore, state.score); saved.highestLevel = Math.max(saved.highestLevel, done); if (done >= 3) saved.messageUnlocked = true; persist(); updateHome(); $('overlay').hidden = false; $('overlayLabel').textContent = '// BUILD SUCCESSFUL'; $('overlayTitle').textContent = done === 5 ? '🏆 ALL BUGS FIXED!' : `✓ Livello ${done} completato!`; $('overlayText').textContent = done === 3 ? '🔓 DEDICA SBLOCCATA! Ora puoi scrivere a Luca e continuare a giocare.' : done === 5 ? 'Hai completato il debugging! Grazie per aver giocato.' : `Punteggio: ${Math.floor(state.score).toLocaleString('it-IT')}. Preparati al prossimo livello.`; $('overlayBtn').textContent = done === 5 ? 'TORNA AL MENU' : done === 3 ? 'SCRIVI LA DEDICA →' : 'LIVELLO SUCCESSIVO →'; $('overlayBtn').onclick = () => { if (done === 5) { show('home'); } else if (done === 3) { openWish(() => levelStart(4), 'CONTINUA AL LIVELLO 4 →'); } else levelStart(done + 1); }; if (done === 3) { $('gameHint').textContent = 'Dopo la dedica potrai continuare dal livello 4.'; }
+      }
+      function loseLevel() { if (!state) return; stop(); state.playing = false; saved.bestScore = Math.max(saved.bestScore, state.score); persist(); $('overlay').hidden = false; $('overlayLabel').textContent = '// TIMEOUT'; $('overlayTitle').textContent = 'Tempo scaduto!'; $('overlayText').textContent = `Hai totalizzato ${Math.floor(state.score).toLocaleString('it-IT')} punti. Riprova il livello ${state.level}!`; $('overlayBtn').textContent = '↻ RIPROVA'; $('overlayBtn').onclick = () => { state.score = 0; levelStart(state.level); }; }
+      function openWish(onReturn, label = '← TORNA AL GIOCO') { refreshApiHealth(); stop(); wishReturn = onReturn; $('wishBack').textContent = label; show('wish'); }
+      $('playBtn').onclick = () => { state = null; levelStart(1); }; $('exitBtn').onclick = () => { stop(); if (state) { saved.bestScore = Math.max(saved.bestScore, state.score); persist(); } show('home'); }; $('homeWishBtn').onclick = () => { if (saved.messageUnlocked) openWish(() => show('home'), '← TORNA AL MENU'); }; $('gameWishBtn').onclick = () => { if (saved.messageUnlocked) { const resume = state?.playing; state.playing = false; openWish(() => { if (state.level === 3 && state.fixed >= LEVELS[2].goal) { levelStart(4); return; } show('game'); if (resume) beginLevel(); }); } }; $('wishBack').onclick = () => { const back = wishReturn; wishReturn = null; if (back) back(); else show('home'); };
+      const form = $('wishForm'), send = $('sendWish'), status = $('wishStatus');
+      form.addEventListener('submit', async e => { e.preventDefault(); if (!saved.messageUnlocked) { status.textContent = 'Completa prima il livello 3.'; status.className = 'status error'; return; } if (!form.reportValidity()) return; if (saved.messageSent) { status.textContent = 'Hai già inviato una dedica da questo browser.'; return; } send.disabled = true; status.className = 'status'; status.textContent = 'Invio in corso…'; const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 12000); try { const r = await fetch(`${GUESTBOOK_API}/api/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: form.elements.name.value.trim(), message: form.elements.message.value.trim(), website: form.elements.website.value }), signal: controller.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); saved.messageSent = true; persist(); status.className = 'status success'; status.textContent = '✓ Dedica ricevuta! È in coda per la stampa. Grazie ❤️'; send.textContent = 'DEDICA INVIATA ✓'; send.disabled = true; form.reset(); } catch (err) { status.className = 'status error'; status.textContent = 'Invio non confermato. Controlla la connessione prima di riprovare, per evitare duplicati.'; send.disabled = false; } finally { clearTimeout(timeout); } });
+      if (saved.messageSent) { send.disabled = true; send.textContent = 'DEDICA GIÀ INVIATA ✓'; status.className = 'status success'; status.textContent = 'Hai già inviato una dedica da questo browser. Grazie!'; }
+      updateHome(); show('home'); checkApiHealth();
+    })();
   </script>
 </body>
 
