@@ -720,23 +720,21 @@
           fatto parte del mio.</strong></p>
       <p>E se trovi ancora qualche bug… almeno quelli nel vasetto puoi mangiarli! 🐛</p>
       <p>Lasciami una dedica qui sotto: riceverò il tuo messaggio via e-mail e sarà un ricordo della laurea.</p>
-      <form id="wishForm" action="https://formsubmit.co/Saglietti.luca@gmail.com" method="POST">
+      <form id="wishForm" action="https://formspree.io/f/xdeevdqk" method="POST">
         <input type="hidden" name="_subject" value="Dedica per la laurea di Luca">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" id="wishNext" value="https://sagliettiluca.it/laurea/?dedica=inviata">
         <label class="field" for="wishName">Il tuo nome</label><input id="wishName" name="name" minlength="2"
           maxlength="40" autocomplete="name" required placeholder="Come ti chiami?">
         <label class="field" for="wishText">La tua dedica (max 250 caratteri)</label><textarea id="wishText"
           name="message" minlength="3" maxlength="250" required
           placeholder="Un augurio, una battuta, un ricordo..."></textarea>
         <div class="honeypot" aria-hidden="true"><label for="website">Non compilare</label><input id="website"
-            name="_honey" tabindex="-1" autocomplete="off"></div>
+            name="_gotcha" tabindex="-1" autocomplete="off"></div>
         <button class="btn" id="sendWish" type="submit">✉ INVIA LA DEDICA</button>
-        <p class="small">L'invio prosegue su FormSubmit, dove potrai completare l'eventuale verifica e vedere la conferma.</p>
+        <p class="small">La dedica viene inviata direttamente da questa pagina: attendi la conferma qui sotto.</p>
         <p class="status" id="wishStatus" role="status" aria-live="polite"></p>
       </form>
       <button class="btn secondary" id="wishBack">← TORNA AL GIOCO</button>
-      <p class="small">Nome e dedica vengono trasmessi tramite FormSubmit alla casella di Luca per ricordare questa giornata. Evita dati personali sensibili.</p>
+      <p class="small">Nome e dedica vengono trasmessi tramite Formspree alla casella di Luca per ricordare questa giornata. Evita dati personali sensibili.</p>
     </section>
     <footer class="foot">MADE WITH ❤️, CAFFEINE &amp; A FEW BUGS<br>LUCA · LAUREA IN INFORMATICA · 6 NOVEMBRE 2026
     </footer>
@@ -795,10 +793,6 @@
       $('playBtn').onclick = () => { state = null; levelStart(1); }; $('exitBtn').onclick = () => { stop(); if (state) { saved.bestScore = Math.max(saved.bestScore, state.score); persist(); } show('home'); }; $('homeWishBtn').onclick = () => { if (saved.messageUnlocked) openWish(() => show('home'), '← TORNA AL MENU'); }; $('gameWishBtn').onclick = () => { if (saved.messageUnlocked) { const resume = state?.playing; state.playing = false; openWish(() => { if (state.level === 3 && state.fixed >= LEVELS[2].goal) { levelStart(4); return; } show('game'); if (resume) beginLevel(); }); } }; $('wishBack').onclick = () => { const back = wishReturn; wishReturn = null; if (back) back(); else show('home'); };
       const form = $('wishForm'), send = $('sendWish'), status = $('wishStatus');
       const DRAFT_KEY = 'luca-wish-draft';
-      const returnUrl = new URL(window.location.href);
-      returnUrl.search = '?dedica=inviata';
-      returnUrl.hash = '';
-      $('wishNext').value = returnUrl.href;
       try {
         const draft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || 'null');
         if (draft) { form.elements.name.value = draft.name || ''; form.elements.message.value = draft.message || ''; }
@@ -808,8 +802,9 @@
       }
       form.addEventListener('input', saveDraft);
       let sending = false;
-      form.addEventListener('submit', e => {
-        if (sending || !saved.messageUnlocked || !form.reportValidity() || form.elements._honey.value) {
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (sending || !saved.messageUnlocked || !form.reportValidity() || form.elements._gotcha.value) {
           e.preventDefault();
           if (!saved.messageUnlocked) { status.textContent = 'Completa prima il livello 3.'; status.className = 'status error'; }
           return;
@@ -827,19 +822,43 @@
         sending = true;
         send.disabled = true;
         status.className = 'status';
-        status.textContent = 'Prosegui su FormSubmit per completare l’invio.';
-        // Il browser invia il POST: nessuna fetch cross-origin né conferma presunta.
+        status.textContent = 'Invio in corso…';
+        form.setAttribute('aria-busy', 'true');
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 20000);
+        try {
+          const response = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' },
+            signal: controller.signal
+          });
+          const result = await response.json();
+          if (!response.ok || result.ok === false || result.errors?.length) {
+            status.className = 'status error';
+            status.textContent = response.status === 429
+              ? 'Troppi invii in questo momento. Attendi qualche minuto prima di riprovare: la dedica resta qui.'
+              : 'Il servizio non ha accettato la dedica. La bozza resta qui: riprova più tardi.';
+            return;
+          }
+          form.reset();
+          try { sessionStorage.removeItem(DRAFT_KEY); } catch { }
+          status.className = 'status success';
+          status.textContent = '✓ Dedica inviata! Grazie ❤️';
+        } catch (error) {
+          status.className = 'status error';
+          status.textContent = error.name === 'AbortError'
+            ? 'Il servizio non ha risposto in tempo. La dedica resta qui: prima di riprovare verifica che non sia già arrivata.'
+            : 'Non è stato possibile confermare l’invio. La dedica resta qui: riprova più tardi.';
+        } finally {
+          clearTimeout(timeout);
+          sending = false;
+          send.disabled = false;
+          form.removeAttribute('aria-busy');
+        }
       });
-      window.addEventListener('pageshow', () => { sending = false; send.disabled = false; });
       updateHome(); show('home');
-      if (new URLSearchParams(window.location.search).get('dedica') === 'inviata' && saved.messageUnlocked) {
-        try { sessionStorage.removeItem(DRAFT_KEY); } catch { }
-        form.reset();
-        openWish(() => show('home'), '← TORNA AL MENU');
-        status.className = 'status success';
-        status.textContent = '✓ Invio confermato da FormSubmit. Grazie per la dedica ❤️';
-        history.replaceState(null, '', window.location.pathname + window.location.hash);
-      }
+
     })();
   </script>
 </body>
