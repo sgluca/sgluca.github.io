@@ -415,10 +415,7 @@
       color: #ff9cae
     }
 
-    .honeypot {
-      position: absolute;
-      left: -10000px
-    }
+    .honeypot { position: absolute; left: -10000px; }
 
     .foot {
       text-align: center;
@@ -543,23 +540,11 @@
       }
     }
 
-    .api-health {
-      flex-shrink: 0;
-      max-width: 48%;
-      text-align: right
-    }
-
-    .api-health.checking {
+    .email-label {
+      text-align: right;
       color: var(--muted)
     }
 
-    .api-health.online {
-      color: var(--mint)
-    }
-
-    .api-health.offline {
-      color: #ff9cae
-    }
     .hero h1 {
       font-size: clamp(54px, 13vw, 96px);
       line-height: .92;
@@ -660,9 +645,6 @@
     #home { padding: 34px 0; }
     #home .eyebrow { font-size: 12px; letter-spacing: .2em; }
     .hero h1 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .api-health { max-width: none; font-weight: 400; }
-    .api-health.online { color: var(--muted); }
-    .api-health.online::first-letter { color: var(--mint); }
     #playBtn { padding: 17px 20px; border-radius: 12px; box-shadow: 0 8px 30px #ff526b35; }
     @media (min-width:650px) {
       .wrap { padding: 32px 30px 38px; }
@@ -676,8 +658,7 @@
 
 <body>
   <div class="wrap">
-    <header class="top"><span>LUCA.DEV // CLASS OF 2026</span><span id="apiHealth" class="api-health checking"
-        role="status" aria-live="polite" title="Verifica disponibilità del servizio dediche">● VERIFICA API…</span>
+    <header class="top"><span>LUCA.DEV // CLASS OF 2026</span><span class="email-label">✉ DEDICHE VIA E-MAIL</span>
     </header>
     <section id="home" class="screen">
         <div class="hero">
@@ -734,11 +715,11 @@
       <div class="windowbar"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><span
           class="windowtitle">guestbook — dedica.txt</span></div>
       <div class="tag">✓ ACHIEVEMENT UNLOCKED</div>
-      <h2>Dedica sbloccata! 🖨️</h2>
+      <h2>Dedica sbloccata! ✉️</h2>
       <p class="thanks">Dietro ogni traguardo ci sono persone che rendono il percorso più bello. <strong>Grazie per aver
           fatto parte del mio.</strong></p>
       <p>E se trovi ancora qualche bug… almeno quelli nel vasetto puoi mangiarli! 🐛</p>
-      <p>Lasciami un messaggio: arriverà sulla mia stampante termica e diventerà un ricordo della laurea.</p>
+      <p>Lasciami una dedica qui sotto: riceverò il tuo messaggio via e-mail e sarà un ricordo della laurea.</p>
       <form id="wishForm">
         <label class="field" for="wishName">Il tuo nome</label><input id="wishName" name="name" minlength="2"
           maxlength="40" autocomplete="name" required placeholder="Come ti chiami?">
@@ -747,11 +728,11 @@
           placeholder="Un augurio, una battuta, un ricordo..."></textarea>
         <div class="honeypot" aria-hidden="true"><label for="website">Non compilare</label><input id="website"
             name="website" tabindex="-1" autocomplete="off"></div>
-        <button class="btn" id="sendWish" type="submit">🖨 INVIA ALLA STAMPANTE</button>
+        <button class="btn" id="sendWish" type="submit">✉ INVIA LA DEDICA</button>
         <p class="status" id="wishStatus" role="status" aria-live="polite"></p>
       </form>
       <button class="btn secondary" id="wishBack">← TORNA AL GIOCO</button>
-      <p class="small">La dedica viene conservata per ricordare questa giornata. Evita dati personali sensibili.</p>
+      <p class="small">Nome e dedica vengono trasmessi tramite FormSubmit alla casella di Luca per ricordare questa giornata. Evita dati personali sensibili.</p>
     </section>
     <footer class="foot">MADE WITH ❤️, CAFFEINE &amp; A FEW BUGS<br>LUCA · LAUREA IN INFORMATICA · 6 NOVEMBRE 2026
     </footer>
@@ -759,8 +740,7 @@
   <script>
     (() => {
       'use strict';
-      // CONFIGURAZIONE: modifica solo questo indirizzo con l'URL HTTPS della tua API.
-      const GUESTBOOK_API = 'https://api.sagliettiluca.it';
+      const WISH_ENDPOINT = 'https://formsubmit.co/ajax/Saglietti.luca@gmail.com';
       const STORE_KEY = 'luca-bughunter-v2';
       const LEVELS = [
         { name: 'Hello World', goal: 6, time: 32, max: 2, speed: 0, trap: 0, interval: 1050 },
@@ -770,34 +750,10 @@
         { name: 'Final Debug', goal: 1, time: 32, max: 1, speed: 96, trap: 0, interval: 1000, boss: true, hp: 30 }
       ];
       const $ = id => document.getElementById(id);
-      // Health del servizio dediche: non indica lo stato fisico della stampante.
-      const HEALTH_INTERVAL = 5 * 60 * 1000;
-      let healthController = null, lastHealthCheck = 0;
-      function setApiHealth(online) { const badge = $('apiHealth'); badge.className = 'api-health ' + (online ? 'online' : 'offline'); badge.textContent = online ? '● SYSTEM ONLINE' : '● SYSTEM OFFLINE'; badge.title = online ? 'API dediche disponibile' : 'API dediche non raggiungibile o non disponibile'; }
-      async function checkApiHealth() {
-        if (healthController || document.hidden) return;
-        lastHealthCheck = Date.now();
-        if (!navigator.onLine) { setApiHealth(false); return; }
-        const controller = new AbortController(); healthController = controller;
-        const timeout = setTimeout(() => controller.abort(), 5000);
-        try {
-          const response = await fetch(`${GUESTBOOK_API}/api/health`, { cache: 'no-store', signal: controller.signal });
-          if (!response.ok) throw new Error('Health HTTP ' + response.status);
-          const body = await response.json();
-          if (healthController === controller) setApiHealth(body?.status === 'online');
-        } catch { if (healthController === controller) setApiHealth(false); }
-        finally { clearTimeout(timeout); if (healthController === controller) healthController = null; }
-      }
-      function refreshApiHealth() { if (Date.now() - lastHealthCheck >= HEALTH_INTERVAL) checkApiHealth(); }
-      setInterval(refreshApiHealth, HEALTH_INTERVAL);
-      document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshApiHealth(); });
-      window.addEventListener('online', checkApiHealth);
-      window.addEventListener('offline', () => { healthController?.abort(); healthController = null; setApiHealth(false); });
-
-      const defaults = { bestScore: 0, highestLevel: 0, messageUnlocked: false, messageSent: false };
+      const defaults = { bestScore: 0, highestLevel: 0, messageUnlocked: false };
       let saved = { ...defaults }; try { const x = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); if (x && typeof x === 'object') saved = { ...defaults, ...x }; } catch { }
       // Compatibilità con eventuali progressi validi già presenti.
-      saved.bestScore = Math.max(0, Number(saved.bestScore) || 0); saved.highestLevel = Math.min(5, Math.max(0, Number(saved.highestLevel) || 0)); saved.messageUnlocked = !!saved.messageUnlocked || saved.highestLevel >= 3; saved.messageSent = !!saved.messageSent;
+      saved.bestScore = Math.max(0, Number(saved.bestScore) || 0); saved.highestLevel = Math.min(5, Math.max(0, Number(saved.highestLevel) || 0)); saved.messageUnlocked = !!saved.messageUnlocked || saved.highestLevel >= 3;
       function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch { } }
       function show(id) { ['home', 'game', 'wish'].forEach(s => $(s).hidden = s !== id); window.scrollTo({ top: 0, behavior: 'instant' }); if (id === 'home') updateHome(); }
       function updateHome() { $('homeBest').textContent = Math.floor(saved.bestScore).toLocaleString('it-IT'); $('homeLevel').textContent = saved.highestLevel; $('homeLock').textContent = saved.messageUnlocked ? '🔓 Dedica sbloccata! Puoi scrivere quando vuoi.' : '🔒 Completa il livello 3 per sbloccare la dedica.'; $('homeLock').classList.toggle('unlocked', saved.messageUnlocked); $('homeWishBtn').classList.toggle('hidden', !saved.messageUnlocked); $('gameWishBtn').classList.toggle('hidden', !saved.messageUnlocked); }
@@ -832,12 +788,59 @@
         if (!state) return; stop(); state.playing = false; renderHud(); const done = state.level; state.score += Math.ceil(state.remaining) * 10; saved.bestScore = Math.max(saved.bestScore, state.score); saved.highestLevel = Math.max(saved.highestLevel, done); if (done >= 3) saved.messageUnlocked = true; persist(); updateHome(); $('overlay').hidden = false; $('overlayLabel').textContent = '// BUILD SUCCESSFUL'; $('overlayTitle').textContent = done === 5 ? '🏆 ALL BUGS FIXED!' : `✓ Livello ${done} completato!`; $('overlayText').textContent = done === 3 ? '🔓 DEDICA SBLOCCATA! Ora puoi scrivere a Luca e continuare a giocare.' : done === 5 ? 'Hai completato il debugging! Grazie per aver giocato.' : `Punteggio: ${Math.floor(state.score).toLocaleString('it-IT')}. Preparati al prossimo livello.`; $('overlayBtn').textContent = done === 5 ? 'TORNA AL MENU' : done === 3 ? 'SCRIVI LA DEDICA →' : 'LIVELLO SUCCESSIVO →'; $('overlayBtn').onclick = () => { if (done === 5) { show('home'); } else if (done === 3) { openWish(() => levelStart(4), 'CONTINUA AL LIVELLO 4 →'); } else levelStart(done + 1); }; if (done === 3) { $('gameHint').textContent = 'Dopo la dedica potrai continuare dal livello 4.'; }
       }
       function loseLevel() { if (!state) return; stop(); state.playing = false; saved.bestScore = Math.max(saved.bestScore, state.score); persist(); $('overlay').hidden = false; $('overlayLabel').textContent = '// TIMEOUT'; $('overlayTitle').textContent = 'Tempo scaduto!'; $('overlayText').textContent = `Hai totalizzato ${Math.floor(state.score).toLocaleString('it-IT')} punti. Riprova il livello ${state.level}!`; $('overlayBtn').textContent = '↻ RIPROVA'; $('overlayBtn').onclick = () => { state.score = 0; levelStart(state.level); }; }
-      function openWish(onReturn, label = '← TORNA AL GIOCO') { refreshApiHealth(); stop(); wishReturn = onReturn; $('wishBack').textContent = label; show('wish'); }
+      function openWish(onReturn, label = '← TORNA AL GIOCO') { stop(); wishReturn = onReturn; $('wishBack').textContent = label; show('wish'); }
       $('playBtn').onclick = () => { state = null; levelStart(1); }; $('exitBtn').onclick = () => { stop(); if (state) { saved.bestScore = Math.max(saved.bestScore, state.score); persist(); } show('home'); }; $('homeWishBtn').onclick = () => { if (saved.messageUnlocked) openWish(() => show('home'), '← TORNA AL MENU'); }; $('gameWishBtn').onclick = () => { if (saved.messageUnlocked) { const resume = state?.playing; state.playing = false; openWish(() => { if (state.level === 3 && state.fixed >= LEVELS[2].goal) { levelStart(4); return; } show('game'); if (resume) beginLevel(); }); } }; $('wishBack').onclick = () => { const back = wishReturn; wishReturn = null; if (back) back(); else show('home'); };
       const form = $('wishForm'), send = $('sendWish'), status = $('wishStatus');
-      form.addEventListener('submit', async e => { e.preventDefault(); if (!saved.messageUnlocked) { status.textContent = 'Completa prima il livello 3.'; status.className = 'status error'; return; } if (!form.reportValidity()) return; if (saved.messageSent) { status.textContent = 'Hai già inviato una dedica da questo browser.'; return; } send.disabled = true; status.className = 'status'; status.textContent = 'Invio in corso…'; const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 12000); try { const r = await fetch(`${GUESTBOOK_API}/api/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: form.elements.name.value.trim(), message: form.elements.message.value.trim(), website: form.elements.website.value }), signal: controller.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); saved.messageSent = true; persist(); status.className = 'status success'; status.textContent = '✓ Dedica ricevuta! È in coda per la stampa. Grazie ❤️'; send.textContent = 'DEDICA INVIATA ✓'; send.disabled = true; form.reset(); } catch (err) { status.className = 'status error'; status.textContent = 'Invio non confermato. Controlla la connessione prima di riprovare, per evitare duplicati.'; send.disabled = false; } finally { clearTimeout(timeout); } });
-      if (saved.messageSent) { send.disabled = true; send.textContent = 'DEDICA GIÀ INVIATA ✓'; status.className = 'status success'; status.textContent = 'Hai già inviato una dedica da questo browser. Grazie!'; }
-      updateHome(); show('home'); checkApiHealth();
+      let sending = false;
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (!saved.messageUnlocked) {
+          status.textContent = 'Completa prima il livello 3.';
+          status.className = 'status error';
+          return;
+        }
+        if (sending || !form.reportValidity() || form.elements.website.value) return;
+        const name = form.elements.name.value.trim(), message = form.elements.message.value.trim();
+        if (name.length < 2 || message.length < 3) {
+          status.textContent = 'Inserisci il tuo nome e una dedica, senza contare gli spazi iniziali e finali.';
+          status.className = 'status error';
+          return;
+        }
+        sending = true;
+        send.disabled = true;
+        form.setAttribute('aria-busy', 'true');
+        status.className = 'status';
+        status.textContent = 'Invio in corso…';
+        const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 15000);
+        try {
+          const response = await fetch(WISH_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ name, message, _subject: 'Dedica per la laurea di Luca', _template: 'table', _honey: form.elements.website.value }),
+            signal: controller.signal
+          });
+          const result = await response.json();
+          if (!response.ok || !(result.success === true || result.success === 'true')) {
+            status.className = 'status error';
+            status.textContent = /activat/i.test(result.message || '')
+              ? "Invio non confermato: il servizio richiede l'attivazione da parte di Luca. La tua dedica resta qui; riprova più tardi."
+              : 'Invio non confermato dal servizio. La tua dedica resta qui; riprova più tardi.';
+            return;
+          }
+          status.className = 'status success';
+          status.textContent = '✓ Dedica inviata a Luca! Grazie ❤️';
+          form.reset();
+        } catch {
+          status.className = 'status error';
+          status.textContent = 'Invio non confermato. La dedica resta qui: controlla la connessione prima di riprovare, per evitare duplicati.';
+        } finally {
+          clearTimeout(timeout);
+          sending = false;
+          send.disabled = false;
+          form.removeAttribute('aria-busy');
+        }
+      });
+      updateHome(); show('home');
     })();
   </script>
 </body>
