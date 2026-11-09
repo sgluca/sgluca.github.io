@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#100e17">
+  <meta name="description" content="BUG HUNTER: trova i bug e festeggia la laurea di Luca con cinque livelli di debugging!">
+  <title>BUG FIXED · Luca | Laurea Ufficio 2026</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #100e17;
+      --panel: #1d2232;
+      --border: #343b51;
+      --text: #f9f5f7;
+      --muted: #a9b3c8;
+      --pink: #ff617c;
+      --mint: #78efba;
+      --gold: #ffd07a
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      background: var(--bg);
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      color: var(--text);
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(ellipse at top, #30223b 0, transparent 55%), var(--bg)
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      touch-action: manipulation
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px
+    }
+
+    .wrap {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 18px 16px max(28px, env(safe-area-inset-bottom))
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font: 700 11px/1.3 ui-monospace, monospace;
+      letter-spacing: .07em;
+      color: var(--muted)
+    }
+
+    .online {
+      color: var(--mint)
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: #1b2030e8;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 14px 40px #0003
+    }
+
+    .eyebrow {
+      font: 700 12px ui-monospace, monospace;
+      letter-spacing: .13em;
+      color: var(--pink)
+    }
+
+    h1 {
+      font-size: clamp(48px, 14vw, 76px);
+      line-height: .91;
+      letter-spacing: -.085em;
+      margin: 18px 0 20px
+    }
+
+    h1 span,
+    .accent {
+      color: var(--pink)
+    }
+
+    h2 {
+      font-size: clamp(27px, 7vw, 36px);
+      line-height: 1.1;
+      letter-spacing: -.04em;
+      margin: 10px 0 14px
+    }
+
+    p {
+      color: var(--muted);
+      margin: 12px 0
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 54px;
+      padding: 13px 16px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--pink);
+      color: #240c17;
+      font-weight: 800
+    }
+
+    .btn.secondary {
+      background: #30374c;
+      color: var(--text);
+      border: 1px solid #4d5772
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 20px 0
+    }
+
+    .stat {
+      padding: 12px 7px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #151a28
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font: 700 10px ui-monospace, monospace;
+      letter-spacing: .07em
+    }
+
+    .stat strong {
+      font-size: 21px;
+      font-variant-numeric: tabular-nums
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin: 16px 0
+    }
+
+    .level {
+      padding: 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      text-align: center;
+      font-weight: 800;
+      color: var(--muted);
+      background: #171d2a
+    }
+
+    .level.done {
+      color: #082318;
+      background: var(--mint);
+      border-color: var(--mint)
+    }
+
+    .level.current {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    .lock {
+      padding: 13px 14px;
+      background: #141a29;
+      border: 1px dashed #56617b;
+      border-radius: 12px;
+      margin: 16px 0;
+      color: var(--gold);
+      font-weight: 700
+    }
+
+    .lock.unlocked {
+      color: var(--mint);
+      border-color: #2d7556
+    }
+
+    [hidden],
+    .hidden {
+      display: none !important
+    }
+
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      font: 700 12px ui-monospace, monospace;
+      color: var(--muted)
+    }
+
+    .hud strong {
+      display: block;
+      color: var(--text);
+      font-size: 22px
+    }
+
+    .bar {
+      height: 8px;
+      background: #3b4155;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 12px 0
+    }
+
+    .bar>div {
+      height: 100%;
+      width: 100%;
+      background: var(--mint);
+      transition: width .12s linear
+    }
+
+    .arena {
+      position: relative;
+      width: 100%;
+      height: clamp(330px, 53svh, 510px);
+      overflow: hidden;
+      border: 1px solid #46506c;
+      border-radius: 16px;
+      background: radial-gradient(circle at 50% 35%, #28334b, #131a29 78%);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      isolation: isolate
+    }
+
+    .arena:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(#ffffff09 1px, transparent 1px), linear-gradient(90deg, #ffffff09 1px, transparent 1px);
+      background-size: 32px 32px
+    }
+
+    .bug {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      padding: 0;
+      border: 2px solid #ffffff44;
+      border-radius: 50%;
+      background: #ec5b72cc;
+      font-size: 29px;
+      line-height: 1;
+      box-shadow: 0 0 0 8px #ff617c18, 0 7px 22px #0005;
+      will-change: transform;
+      touch-action: manipulation;
+      z-index: 2
+    }
+
+    .bug.fast {
+      background: #d9982b
+    }
+
+    .bug.tank {
+      background: #8157c5
+    }
+
+    .bug.trap {
+      background: #4b556b;
+      border-style: dashed;
+      box-shadow: 0 0 0 8px #a6b0c014
+    }
+
+    .bug.boss {
+      width: 82px;
+      height: 82px;
+      font-size: 43px;
+      background: #ad396a;
+      box-shadow: 0 0 0 12px #ff617c22, 0 0 32px #ff617c44
+    }
+
+    .bug:active {
+      filter: brightness(1.3)
+    }
+
+    .floating {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--mint);
+      animation: float .6s ease-out forwards
+    }
+
+    @keyframes float {
+      to {
+        transform: translateY(-38px);
+        opacity: 0
+      }
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      background: #111625ed;
+      backdrop-filter: blur(5px)
+    }
+
+    .overlay h3 {
+      font-size: 29px;
+      margin: 8px 0
+    }
+
+    .overlay p {
+      max-width: 270px
+    }
+
+    .overlay .btn {
+      max-width: 270px
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 12px;
+      margin: 12px 0 0
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+      margin-top: 14px
+    }
+
+    .actions .btn {
+      min-height: 46px;
+      font-size: 13px
+    }
+
+    .success {
+      color: var(--mint)
+    }
+
+    .error {
+      color: #ff9cae
+    }
+
+    .foot {
+      text-align: center;
+      color: #78849d;
+      font: 11px ui-monospace, monospace;
+      margin: 26px 0 0
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *:before,
+      *:after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+      }
+    }
+
+    @media(max-width:360px) {
+      .wrap {
+        padding-inline: 11px
+      }
+
+      .panel {
+        padding: 15px
+      }
+
+      .bug {
+        width: 51px;
+        height: 51px
+      }
+    }
+
+    /* Cornice ispirata alle finestre macOS. */
+    .panel {
+      box-shadow: 0 24px 65px #0005, inset 0 1px 0 #ffffff0c
+    }
+
+    .windowbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: -20px -20px 20px;
+      padding: 13px 16px;
+      min-height: 44px;
+      border-bottom: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      background: linear-gradient(#343949, #272c3b);
+      box-shadow: inset 0 1px 0 #ffffff12
+    }
+
+    .traffic {
+      display: flex;
+      gap: 7px;
+      flex-shrink: 0
+    }
+
+    .traffic i {
+      display: block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px #0002;
+      background: #ff5f57
+    }
+
+    .traffic i:nth-child(2) {
+      background: #febc2e
+    }
+
+    .traffic i:nth-child(3) {
+      background: #28c840
+    }
+
+    .windowtitle {
+      flex: 1;
+      min-width: 0;
+      padding-right: 47px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+      color: #c6cbd6;
+      font: 11px ui-monospace, monospace;
+      letter-spacing: .01em
+    }
+
+    .bug.boss[data-phase="2"] {
+      background: #c14350;
+      box-shadow: 0 0 0 10px #ff617c22, 0 0 30px #ff617c55
+    }
+
+    .bug.boss[data-phase="3"] {
+      background: #e55732;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 10px #ff853522, 0 0 36px #ff853555
+    }
+
+    @media(max-width:360px) {
+      .windowbar {
+        margin: -15px -15px 18px;
+        padding-inline: 12px
+      }
+
+      .windowtitle {
+        font-size: 10px
+      }
+    }
+
+    .email-label {
+      text-align: right;
+      color: var(--muted)
+    }
+
+    .hero h1 {
+      font-size: clamp(54px, 13vw, 96px);
+      line-height: .92;
+      letter-spacing: -.095em;
+      margin: 16px 0 22px;
+      font-weight: 900
+    }
+
+    .hero h1 span {
+      color: var(--pink)
+    }
+
+    .lead {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 520px
+    }
+
+    .terminal {
+      background: rgba(26, 23, 35, .94);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 28px 0 22px;
+      box-shadow: 0 18px 70px #0006
+    }
+
+    .terminal-head {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      padding: 13px 16px;
+      background: #24202b;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .terminal-head i {
+      display: block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ff6a6a
+    }
+
+    .terminal-head i:nth-child(2) {
+      background: #f7c46d
+    }
+
+    .terminal-head i:nth-child(3) {
+      background: #7edaa5
+    }
+
+    .terminal-head small {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 11px
+    }
+
+    .terminal-body {
+      min-height: 170px;
+      padding: 22px 18px;
+      line-height: 1.9;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere
+    }
+
+    .prompt {
+      color: var(--mint)
+    }
+
+    .error {
+      color: var(--pink)
+    }
+
+    .success {
+      color: var(--mint)
+    }
+
+
+    :root {
+      --bg: #100e17;
+      --panel: #1a1723;
+      --border: #39313e;
+      --text: #fff4f0;
+      --muted: #b9aab9;
+      --pink: #ff526b;
+      --mint: #91e6b4;
+      --gold: #f9c97b;
+    }
+    body {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: radial-gradient(ellipse at 50% -10%, #49212e 0%, transparent 58%), var(--bg);
+    }
+    .wrap { max-width: 680px; padding: 24px 20px 42px; }
+    .top { font-size: 11px; font-weight: 400; letter-spacing: .12em; }
+    #home { padding: 34px 0; }
+    #home .eyebrow { font-size: 12px; letter-spacing: .2em; }
+    .hero h1 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    #playBtn { padding: 17px 20px; border-radius: 12px; box-shadow: 0 8px 30px #ff526b35; }
+    @media (min-width:650px) {
+      .wrap { padding: 32px 30px 38px; }
+      .terminal-body { padding: 26px; }
+    }
+    @media (max-width:360px) {
+      .top { font-size: 9px; gap: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="top"><span>LUCA.DEV // CLASS OF 2026</span><span class="email-label">● SYSTEM ONLINE</span>
+    </header>
+    <section id="home" class="screen">
+        <div class="hero">
+          <div class="eyebrow">// GRADUATION RELEASE v1.0</div>
+          <h1>BUG<br><span>FIXED.</span></h1>
+          <p class="lead">Hai trovato un bug nel mio regalo di laurea. Completa tutti e cinque i livelli con una
+            piccola operazione di debugging.</p>
+        </div>
+        <div class="terminal" aria-label="Console di avvio">
+          <div class="terminal-head"><i></i><i></i><i></i><small>graduation.exe</small></div>
+          <div class="terminal-body"><span class="prompt">$</span> ./graduation.exe
+            <span class="success">✓</span> Compilazione completata
+            <span class="success">✓</span> Esami superati
+            <span class="success">✓</span> Tesi consegnata
+            <span class="error">!</span> Rilevati 6 bug nell'ultimo rilascio
+            <span class="prompt">&gt;</span> Intervento richiesto_
+          </div>
+        </div>
+      <button class="btn" id="playBtn">AVVIA DEBUGGING →</button>
+      <div class="stats">
+        <div class="stat"><span>RECORD</span><strong id="homeBest">0</strong></div>
+        <div class="stat"><span>LIVELLO MAX</span><strong id="homeLevel">0</strong></div>
+        <div class="stat"><span>MISSIONE</span><strong>5/5</strong></div>
+      </div>
+      <p class="small">Solo un dito, nessuna registrazione. I tuoi progressi restano salvati su questo telefono.</p>
+    </section>
+    <section id="game" class="screen panel" hidden>
+      <div class="windowbar"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><span
+          class="windowtitle">debugger — live session</span></div>
+      <div class="eyebrow" id="levelName">// LEVEL 1</div>
+      <h2 id="gameTitle">Hello World</h2>
+      <div class="hud">
+        <div>SCORE<strong id="score">0</strong></div>
+        <div>FIXED<strong id="fixed">0/6</strong></div>
+        <div>TIME<strong id="time">30s</strong></div>
+      </div>
+      <div class="bar">
+        <div id="timeBar"></div>
+      </div>
+      <div class="arena" id="arena" aria-label="Area di gioco: tocca gli insetti, evita i falsi bug">
+        <div class="overlay" id="overlay" hidden>
+          <div class="eyebrow" id="overlayLabel">// SYSTEM</div>
+          <h3 id="overlayTitle">Pronto?</h3>
+          <p id="overlayText"></p><button class="btn" id="overlayBtn">CONTINUA →</button>
+        </div>
+      </div>
+      <p class="hint" id="gameHint">Tocca i bug per eliminarli.</p>
+      <div class="actions"><button class="btn secondary" id="exitBtn">← MENU</button></div>
+    </section>
+    <footer class="foot">MADE WITH ❤️, CAFFEINE &amp; A FEW BUGS<br>LUCA · LAUREA IN INFORMATICA · 6 NOVEMBRE 2026
+    </footer>
+  </div>
+  <script>
+    (() => {
+      'use strict';
+      const STORE_KEY = 'luca-bughunter-ufficio-v1';
+      const LEVELS = [
+        { name: 'Hello World', goal: 6, time: 32, max: 2, speed: 0, trap: 0, interval: 1050 },
+        { name: 'Syntax Error', goal: 8, time: 36, max: 3, speed: 28, trap: 0, interval: 900 },
+        { name: 'Memory Leak', goal: 10, time: 42, max: 4, speed: 40, trap: .22, interval: 800 },
+        { name: 'Race Condition', goal: 12, time: 43, max: 4, speed: 67, trap: .3, interval: 680 },
+        { name: 'Final Debug', goal: 1, time: 32, max: 1, speed: 96, trap: 0, interval: 1000, boss: true, hp: 30 }
+      ];
+      const $ = id => document.getElementById(id);
+      const defaults = { bestScore: 0, highestLevel: 0 };
+      let saved = { ...defaults }; try { const x = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); if (x && typeof x === 'object') saved = { ...defaults, ...x }; } catch { }
+      // Compatibilità con eventuali progressi validi già presenti.
+      saved.bestScore = Math.max(0, Number(saved.bestScore) || 0); saved.highestLevel = Math.min(5, Math.max(0, Number(saved.highestLevel) || 0));
+      function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch { } }
+      function show(id) { ['home', 'game'].forEach(s => $(s).hidden = s !== id); window.scrollTo({ top: 0, behavior: 'instant' }); if (id === 'home') updateHome(); }
+      function updateHome() { $('homeBest').textContent = Math.floor(saved.bestScore).toLocaleString('it-IT'); $('homeLevel').textContent = saved.highestLevel; }
+      let state = null, raf = 0, uid = 0, spawner = 0, lastFrame = 0;
+      const rand = (a, b) => a + Math.random() * (b - a);
+      function stop() { cancelAnimationFrame(raf); clearInterval(spawner); raf = 0; spawner = 0; lastFrame = 0; }
+      function levelStart(n) { stop(); const cfg = LEVELS[n - 1]; state = { level: n, score: state?.score || 0, fixed: 0, combo: 0, remaining: cfg.time, playing: false, bugs: new Map(), bossHits: 0, spawnedBoss: false }; $('levelName').textContent = `// LEVEL ${n} / 5`; $('gameTitle').textContent = cfg.name; $('gameHint').textContent = cfg.boss ? `BOSS FINALE: ${cfg.hp} colpi, 3 fasi. Dopo pochi colpi cambia posizione!` : n >= 3 ? 'Elimina i bug colorati. Evita i falsi bug grigi!' : 'Tocca i bug per correggere gli errori.'; $('arena').querySelectorAll('.bug,.floating').forEach(e => e.remove()); $('overlay').hidden = false; $('overlayLabel').textContent = `// LEVEL ${n}`; $('overlayTitle').textContent = cfg.name; $('overlayText').textContent = cfg.boss ? `${cfg.hp} punti vita in ${cfg.time} secondi. Si sposta dopo pochi colpi e accelera a ogni fase: inseguilo!` : `Correggi ${cfg.goal} bug prima che scada il tempo.`; $('overlayBtn').textContent = 'INIZIA LIVELLO →'; $('overlayBtn').onclick = beginLevel; renderHud(); show('game'); }
+      function beginLevel() { if (!state || state.playing) return; $('overlay').hidden = true; state.playing = true; lastFrame = 0; if (!state.bugs.size) spawn(); const cfg = LEVELS[state.level - 1]; if (!cfg.boss) spawner = setInterval(() => { if (state?.playing && state.bugs.size < cfg.max) spawn(); }, cfg.interval); raf = requestAnimationFrame(tick); }
+      function spawn() {
+        if (!state?.playing) return; const cfg = LEVELS[state.level - 1]; if (cfg.boss && state.spawnedBoss) return; const arena = $('arena'), w = arena.clientWidth, h = arena.clientHeight, boss = !!cfg.boss, size = boss ? 82 : (window.matchMedia('(max-width:360px)').matches ? 51 : 58), x = rand(8, Math.max(9, w - size - 8)), y = rand(15, Math.max(16, h - size - 15)), trap = !boss && Math.random() < cfg.trap && [...state.bugs.values()].some(b => !b.trap) && [...state.bugs.values()].filter(b => b.trap).length < 2, fast = !boss && state.level > 1 && Math.random() < .35, tank = !boss && state.level >= 3 && Math.random() < .24 && !trap, emoji = boss ? '👾' : trap ? '💣' : tank ? '🪲' : fast ? '🐛' : ['🐞', '🐜', '🕷️', '🐛'][Math.floor(Math.random() * 4)], el = document.createElement('button'), id = ++uid;
+        el.type = 'button'; el.className = 'bug' + (boss ? ' boss' : '') + (trap ? ' trap' : '') + (fast ? ' fast' : '') + (tank ? ' tank' : ''); el.textContent = emoji; el.setAttribute('aria-label', boss ? 'Colpisci il boss' : trap ? 'Falso bug, non toccare' : 'Elimina il bug'); const speed = boss ? cfg.speed : cfg.speed * (fast ? 1.55 : tank ? .7 : 1) * rand(.65, 1.25); const b = { id, el, x, y, size, vx: rand(-1, 1) * speed, vy: rand(-1, 1) * speed, hp: boss ? cfg.hp : tank ? 2 : 1, trap }; if (Math.abs(b.vx) < 8 && speed > 0) b.vx = speed * .7; if (Math.abs(b.vy) < 8 && speed > 0) b.vy = -speed * .5; if (boss) { const angle = rand(0, Math.PI * 2); b.vx = Math.cos(angle) * speed; b.vy = Math.sin(angle) * speed; el.dataset.phase = '1'; } state.bugs.set(id, b); el.style.transform = `translate3d(${x}px,${y}px,0)`; el.addEventListener('click', e => { e.preventDefault(); hit(id); }); arena.append(el); if (boss) state.spawnedBoss = true;
+      }
+      function floatText(x, y, txt, bad = false) { const e = document.createElement('div'); e.className = 'floating'; e.style.left = x + 'px'; e.style.top = y + 'px'; e.style.color = bad ? '#ff9cae' : '#78efba'; e.textContent = txt; $('arena').append(e); setTimeout(() => e.remove(), 620); }
+      function hit(id) {
+        if (!state?.playing) return; const b = state.bugs.get(id); if (!b) return; if (b.trap) { state.combo = 0; state.score = Math.max(0, state.score - 75); state.remaining = Math.max(0, state.remaining - 3); floatText(b.x, b.y, '-75 / -3s', true); removeBug(id); renderHud(); return; }
+        b.hp--; if (LEVELS[state.level - 1].boss) { state.bossHits++; if (b.hp > 0) { const phase = Math.min(2, Math.floor(state.bossHits / 10)); const stride = phase === 2 ? 2 : 3; if (state.bossHits % stride === 0 || state.bossHits % 10 === 0) bossEvade(b, phase); } } state.score += 25 + Math.min(10, state.combo) * 5; floatText(b.x, b.y, b.hp ? '-1 HP' : `+${25 + Math.min(10, state.combo) * 5}`); if (b.hp > 0) { b.el.style.filter = 'brightness(1.8)'; setTimeout(() => { if (b.el.isConnected) b.el.style.filter = ''; }, 90); renderHud(); return; } state.combo++; state.fixed++; state.score += 50; removeBug(id); if (state.fixed >= LEVELS[state.level - 1].goal) { finishLevel(); return; } if (state.bugs.size && [...state.bugs.values()].every(b => b.trap)) spawn(); renderHud();
+      }
+      function bossEvade(b, phase) {
+        const arena = $('arena'), maxX = Math.max(8, arena.clientWidth - b.size - 8), maxY = Math.max(8, arena.clientHeight - b.size - 8);
+        // Salta nel lato opposto: i tocchi ripetuti nello stesso punto non bastano.
+        b.x = b.x < maxX / 2 ? rand(maxX * .65, maxX) : rand(8, Math.max(9, maxX * .35));
+        b.y = b.y < maxY / 2 ? rand(maxY * .6, maxY) : rand(8, Math.max(9, maxY * .4));
+        const speed = LEVELS[state.level - 1].speed * (1 + phase * .4), angle = rand(0, Math.PI * 2);
+        b.vx = Math.cos(angle) * speed; b.vy = Math.sin(angle) * speed; b.el.dataset.phase = String(phase + 1);
+        b.el.style.transform = `translate3d(${b.x}px,${b.y}px,0)`;
+        $('gameHint').textContent = `BOSS · FASE ${phase + 1}/3 · ${b.hp} HP rimasti${phase === 2 ? ' · ULTIMO SPRINT!' : ''}`;
+      }
+      function removeBug(id) { const b = state?.bugs.get(id); if (b) { b.el.remove(); state.bugs.delete(id); } }
+      function renderHud() { if (!state) return; const cfg = LEVELS[state.level - 1]; $('score').textContent = Math.floor(state.score).toLocaleString('it-IT'); $('fixed').textContent = cfg.boss ? `${state.bossHits}/${cfg.hp}` : `${state.fixed}/${cfg.goal}`; $('time').textContent = Math.ceil(state.remaining) + 's'; $('timeBar').style.width = Math.max(0, state.remaining / cfg.time * 100) + '%'; $('timeBar').style.background = state.remaining < 10 ? 'var(--pink)' : 'var(--mint)'; }
+      function tick(now) { if (!state?.playing) return; if (!lastFrame) lastFrame = now; const dt = Math.min(.05, (now - lastFrame) / 1000); lastFrame = now; state.remaining -= dt; const w = $('arena').clientWidth, h = $('arena').clientHeight; for (const b of state.bugs.values()) { b.x += b.vx * dt; b.y += b.vy * dt; if (b.x < 4) { b.x = 4; b.vx = Math.abs(b.vx); } if (b.y < 4) { b.y = 4; b.vy = Math.abs(b.vy); } if (b.x > w - b.size - 4) { b.x = Math.max(4, w - b.size - 4); b.vx = -Math.abs(b.vx); } if (b.y > h - b.size - 4) { b.y = Math.max(4, h - b.size - 4); b.vy = -Math.abs(b.vy); } b.el.style.transform = `translate3d(${b.x}px,${b.y}px,0)`; } renderHud(); if (state.remaining <= 0) { loseLevel(); return; } raf = requestAnimationFrame(tick); }
+      function finishLevel() {
+        if (!state) return; stop(); state.playing = false; renderHud(); const done = state.level; state.score += Math.ceil(state.remaining) * 10; saved.bestScore = Math.max(saved.bestScore, state.score); saved.highestLevel = Math.max(saved.highestLevel, done); persist(); updateHome(); $('overlay').hidden = false; $('overlayLabel').textContent = '// BUILD SUCCESSFUL'; $('overlayTitle').textContent = done === 5 ? '🏆 ALL BUGS FIXED!' : `✓ Livello ${done} completato!`; $('overlayText').textContent = done === 5 ? 'Hai completato il debugging! Grazie per aver giocato.' : `Punteggio: ${Math.floor(state.score).toLocaleString('it-IT')}. Preparati al prossimo livello.`; $('overlayBtn').textContent = done === 5 ? 'TORNA AL MENU' : 'LIVELLO SUCCESSIVO →'; $('overlayBtn').onclick = () => { if (done === 5) { show('home'); } else levelStart(done + 1); };
+      }
+      function loseLevel() { if (!state) return; stop(); state.playing = false; saved.bestScore = Math.max(saved.bestScore, state.score); persist(); $('overlay').hidden = false; $('overlayLabel').textContent = '// TIMEOUT'; $('overlayTitle').textContent = 'Tempo scaduto!'; $('overlayText').textContent = `Hai totalizzato ${Math.floor(state.score).toLocaleString('it-IT')} punti. Riprova il livello ${state.level}!`; $('overlayBtn').textContent = '↻ RIPROVA'; $('overlayBtn').onclick = () => { state.score = 0; levelStart(state.level); }; }
+      $('playBtn').onclick = () => { state = null; levelStart(1); };
+      $('exitBtn').onclick = () => { stop(); if (state) { saved.bestScore = Math.max(saved.bestScore, state.score); persist(); } show('home'); };
+      updateHome(); show('home');
+
+    })();
+  </script>
+</body>
+
+</html>
